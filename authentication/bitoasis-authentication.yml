@@ -1,0 +1,54 @@
+generated: '2026-07-18'
+method: searched
+source: >-
+  https://api.bitoasis.net/doc/ ; https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py ;
+  https://instructions.tryargus.com/bitoasis.html
+docs: https://support.bitoasis.net/en/support/solutions/articles/29000035643-api-documentation
+summary:
+  types: [http]
+  http_scheme: bearer
+  token_style: api-token
+  token_location: header
+  header: Authorization
+  oauth2_flows: []
+schemes:
+  - name: bearerAuth
+    type: http
+    scheme: bearer
+    in: header
+    header: Authorization
+    format: 'Bearer <api-token>'
+    sources: [openapi/bitoasis-exchange-openapi.yml]
+    description: >-
+      A BitOasis API token (Key + Secret pair) generated from the account UI at
+      Settings > Security > Token Management
+      (https://bitoasis.net/en/settings/security/tokens). Sent as an
+      Authorization: Bearer header. Public market-data endpoints require no token.
+token_management:
+  create_at: https://bitoasis.net/en/settings/security/tokens
+  ip_whitelisting: optional
+  permissions:
+    - id: account_balance
+      label: Account Balance
+      access: read
+    - id: coin_deposit_read
+      label: Digital Assets Deposit Read Access
+      access: read
+    - id: coin_withdrawal_read
+      label: Digital Asset Withdrawal Read Access
+      access: read
+    - id: fiat_deposit_read
+      label: Fiat Deposit Read Access
+      access: read
+    - id: fiat_withdrawal_read
+      label: Fiat Withdrawal Read Access
+      access: read
+    - id: pro_order_read
+      label: Pro Order Read Access
+      access: read
+  note: >-
+    Token permissions are granular read/write capability toggles, not OAuth
+    scopes (there is no OAuth authorization/token endpoint). The read
+    permissions above are documented; write-capable permissions exist to enable
+    place-order and withdrawal operations. Read-only tokens are recommended
+    unless trading/withdrawal automation is required.
