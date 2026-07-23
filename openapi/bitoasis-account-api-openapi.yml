@@ -1,0 +1,57 @@
+openapi: 3.1.0
+info:
+  title: BitOasis Exchange Account API
+  version: v1
+  description: The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides public market data (markets, tickers, order books, trades) and authenticated account operations (balances, banks, order placement/cancellation, and crypto and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token generated from Settings > Security > Token Management. This description is derived faithfully from BitOasis' first-party open-source MCP client (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the same https://api.bitoasis.net/v1 REST surface documented at https://api.bitoasis.net/doc/.
+  x-provenance:
+    generated: '2026-07-18'
+    method: derived
+    source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+  contact:
+    name: BitOasis Support
+    email: support@bitoasis.net
+    url: https://support.bitoasis.net/
+  license:
+    name: Proprietary
+servers:
+- url: https://api.bitoasis.net/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Account
+  description: Authenticated account balances and registered banks.
+paths:
+  /exchange/balances:
+    get:
+      operationId: getBalances
+      tags:
+      - Account
+      summary: Get balances
+      description: Your balances across all currencies.
+      responses:
+        '200':
+          description: Balances.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/banks:
+    get:
+      operationId: getBanks
+      tags:
+      - Account
+      summary: Get banks
+      description: Your registered bank accounts.
+      responses:
+        '200':
+          description: Registered banks.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token generated at Settings > Security > Token Management, sent as an Authorization: Bearer <token> header. Tokens carry granular read permissions (Account Balance, deposit/withdrawal read access, Pro Order read access) and optional trade/withdrawal write permissions.'

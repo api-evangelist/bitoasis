@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: BitOasis Exchange Account Fiat Deposits API
+  version: v1
+  description: The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides public market data (markets, tickers, order books, trades) and authenticated account operations (balances, banks, order placement/cancellation, and crypto and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token generated from Settings > Security > Token Management. This description is derived faithfully from BitOasis' first-party open-source MCP client (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the same https://api.bitoasis.net/v1 REST surface documented at https://api.bitoasis.net/doc/.
+  x-provenance:
+    generated: '2026-07-18'
+    method: derived
+    source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+  contact:
+    name: BitOasis Support
+    email: support@bitoasis.net
+    url: https://support.bitoasis.net/
+  license:
+    name: Proprietary
+servers:
+- url: https://api.bitoasis.net/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Fiat Deposits
+  description: Fiat deposit history.
+paths:
+  /exchange/fiat-deposits:
+    get:
+      operationId: getFiatDeposits
+      tags:
+      - Fiat Deposits
+      summary: List fiat deposits
+      description: Fiat deposit history.
+      parameters:
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Fiat deposits.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/fiat-deposit/{deposit_id}:
+    get:
+      operationId: getFiatDeposit
+      tags:
+      - Fiat Deposits
+      summary: Get fiat deposit
+      description: Fiat deposit details by ID.
+      parameters:
+      - name: deposit_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Fiat deposit details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+    NotFound:
+      description: Resource not found.
+  parameters:
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema:
+        type: string
+        format: date
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+    Offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token generated at Settings > Security > Token Management, sent as an Authorization: Bearer <token> header. Tokens carry granular read permissions (Account Balance, deposit/withdrawal read access, Pro Order read access) and optional trade/withdrawal write permissions.'

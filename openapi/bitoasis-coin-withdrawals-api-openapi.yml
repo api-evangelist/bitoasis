@@ -1,0 +1,150 @@
+openapi: 3.1.0
+info:
+  title: BitOasis Exchange Account Coin Withdrawals API
+  version: v1
+  description: The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides public market data (markets, tickers, order books, trades) and authenticated account operations (balances, banks, order placement/cancellation, and crypto and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token generated from Settings > Security > Token Management. This description is derived faithfully from BitOasis' first-party open-source MCP client (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the same https://api.bitoasis.net/v1 REST surface documented at https://api.bitoasis.net/doc/.
+  x-provenance:
+    generated: '2026-07-18'
+    method: derived
+    source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+  contact:
+    name: BitOasis Support
+    email: support@bitoasis.net
+    url: https://support.bitoasis.net/
+  license:
+    name: Proprietary
+servers:
+- url: https://api.bitoasis.net/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Coin Withdrawals
+  description: Digital-asset withdrawal history, fees, and creation.
+paths:
+  /exchange/coin-withdrawals/{currency}:
+    get:
+      operationId: getCoinWithdrawals
+      tags:
+      - Coin Withdrawals
+      summary: List coin withdrawals
+      description: Crypto withdrawal history for a currency.
+      parameters:
+      - $ref: '#/components/parameters/Currency'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Coin withdrawals.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/coin-withdrawal/{withdrawal_id}:
+    get:
+      operationId: getCoinWithdrawal
+      tags:
+      - Coin Withdrawals
+      summary: Get coin withdrawal
+      description: Crypto withdrawal details by ID.
+      parameters:
+      - name: withdrawal_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Coin withdrawal details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/coin-withdrawal:
+    post:
+      operationId: newCoinWithdrawal
+      tags:
+      - Coin Withdrawals
+      summary: New coin withdrawal
+      description: Withdraw crypto to an external address.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - currency
+              - amount
+              - withdrawal_address
+              properties:
+                currency:
+                  type: string
+                amount:
+                  type: string
+                withdrawal_address:
+                  type: string
+                withdrawal_address_id:
+                  type: string
+                network:
+                  type: string
+      responses:
+        '200':
+          description: Withdrawal created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/coin-withdrawal-fees:
+    get:
+      operationId: getCoinWithdrawalFees
+      tags:
+      - Coin Withdrawals
+      summary: Get coin withdrawal fees
+      description: Withdrawal fees per currency.
+      responses:
+        '200':
+          description: Withdrawal fees.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    Currency:
+      name: currency
+      in: path
+      required: true
+      description: Currency code, e.g. BTC.
+      schema:
+        type: string
+        example: BTC
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema:
+        type: string
+        format: date
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+    Offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: Bad request.
+    Unauthorized:
+      description: Missing or invalid API token.
+    NotFound:
+      description: Resource not found.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token generated at Settings > Security > Token Management, sent as an Authorization: Bearer <token> header. Tokens carry granular read permissions (Account Balance, deposit/withdrawal read access, Pro Order read access) and optional trade/withdrawal write permissions.'

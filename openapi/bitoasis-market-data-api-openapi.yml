@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: BitOasis Exchange Account Market Data API
+  version: v1
+  description: The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides public market data (markets, tickers, order books, trades) and authenticated account operations (balances, banks, order placement/cancellation, and crypto and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token generated from Settings > Security > Token Management. This description is derived faithfully from BitOasis' first-party open-source MCP client (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the same https://api.bitoasis.net/v1 REST surface documented at https://api.bitoasis.net/doc/.
+  x-provenance:
+    generated: '2026-07-18'
+    method: derived
+    source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+  contact:
+    name: BitOasis Support
+    email: support@bitoasis.net
+    url: https://support.bitoasis.net/
+  license:
+    name: Proprietary
+servers:
+- url: https://api.bitoasis.net/v1
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Market Data
+  description: Public market data endpoints (no authentication required).
+paths:
+  /exchange/markets:
+    get:
+      operationId: getMarkets
+      tags:
+      - Market Data
+      summary: List markets
+      description: List all tokens and trading pairs available on the exchange.
+      security: []
+      responses:
+        '200':
+          description: Markets list.
+  /exchange/ticker/{pair}:
+    get:
+      operationId: getTicker
+      tags:
+      - Market Data
+      summary: Get ticker
+      description: Current price and ticker for a trading pair (e.g. BTC-AED).
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/Pair'
+      responses:
+        '200':
+          description: Ticker for the pair.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/order-book/{pair}:
+    get:
+      operationId: getOrderBook
+      tags:
+      - Market Data
+      summary: Get order book
+      description: Bids and asks for a trading pair.
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/Pair'
+      - name: bids_limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: asks_limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Order book for the pair.
+  /exchange/trades/{pair}:
+    get:
+      operationId: getTrades
+      tags:
+      - Market Data
+      summary: Get recent trades
+      description: Recent public trade history for a trading pair.
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/Pair'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Recent trades for the pair.
+components:
+  parameters:
+    Pair:
+      name: pair
+      in: path
+      required: true
+      description: Trading pair, e.g. BTC-AED.
+      schema:
+        type: string
+        example: BTC-AED
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema:
+        type: string
+        format: date
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+  responses:
+    NotFound:
+      description: Resource not found.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token generated at Settings > Security > Token Management, sent as an Authorization: Bearer <token> header. Tokens carry granular read permissions (Account Balance, deposit/withdrawal read access, Pro Order read access) and optional trade/withdrawal write permissions.'
