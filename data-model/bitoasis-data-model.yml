@@ -1,0 +1,81 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/bitoasis-exchange-openapi.yml
+entities:
+  - name: Market
+    key: pair
+    id_format: 'BASE-QUOTE (e.g. BTC-AED)'
+    from_operations: [getMarkets, getTicker]
+  - name: Ticker
+    belongs_to: Market
+    via: pair
+    from_operations: [getTicker]
+  - name: OrderBook
+    belongs_to: Market
+    via: pair
+    from_operations: [getOrderBook]
+  - name: Trade
+    belongs_to: Market
+    via: pair
+    from_operations: [getTrades]
+  - name: Balance
+    key: currency
+    from_operations: [getBalances]
+  - name: Bank
+    from_operations: [getBanks]
+    notes: Registered fiat bank account, referenced by fiat withdrawals.
+  - name: Order
+    key: id
+    id_format: integer
+    belongs_to: Market
+    via: pair
+    fields: [pair, side, type, amount, price, stop_price, status]
+    from_operations: [getOrders, getOrder, placeOrder, cancelOrder]
+  - name: CoinDeposit
+    key: deposit_id
+    id_format: integer
+    belongs_to: Currency
+    via: currency
+    from_operations: [getCoinDeposits, getCoinDeposit, newCoinDepositAddress]
+  - name: CoinWithdrawal
+    key: withdrawal_id
+    id_format: integer
+    belongs_to: Currency
+    via: currency
+    fields: [currency, amount, withdrawal_address, network]
+    from_operations: [getCoinWithdrawals, getCoinWithdrawal, newCoinWithdrawal]
+  - name: FiatDeposit
+    key: deposit_id
+    id_format: integer
+    from_operations: [getFiatDeposits, getFiatDeposit]
+  - name: FiatWithdrawal
+    key: withdrawal_id
+    id_format: integer
+    belongs_to: Bank
+    fields: [amount.value, amount.currency, origin]
+    from_operations: [getFiatWithdrawals, getFiatWithdrawal, newFiatWithdrawal, cancelFiatWithdrawal]
+relationships:
+  - from: Ticker
+    type: belongs_to
+    to: Market
+    via: pair
+  - from: OrderBook
+    type: belongs_to
+    to: Market
+    via: pair
+  - from: Trade
+    type: belongs_to
+    to: Market
+    via: pair
+  - from: Order
+    type: belongs_to
+    to: Market
+    via: pair
+  - from: FiatWithdrawal
+    type: belongs_to
+    to: Bank
+    via: bank
+notes: >-
+  Derived entity graph from the v1 exchange operations. Currency codes (BTC,
+  ETH, AED, ...) key the coin deposit/withdrawal and balance resources; pair
+  (BASE-QUOTE) keys the market-scoped resources.

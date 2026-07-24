@@ -1,0 +1,23 @@
+generated: '2026-07-18'
+method: derived
+source: >-
+  openapi/bitoasis-exchange-openapi.yml ;
+  https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+modes:
+  - name: order-validation
+    trigger:
+      operation: placeOrder
+      param: test
+      location: query
+      value: 'true'
+    behavior: >-
+      Validates an order request (pair/side/type/amount/price) without placing
+      or executing it. Use to dry-run order construction against the live API
+      before submitting a real order.
+test_values:
+  documented: false
+  notes: >-
+    BitOasis does not publish a separate sandbox/testnet host or magic test
+    identifiers (test cards, test IBANs) on the accessible surface. The only
+    documented dry-run mechanism is placeOrder?test=true. No fabricated test
+    values are recorded here.

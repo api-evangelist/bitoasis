@@ -1,0 +1,29 @@
+# BitOasis
+
+> BitOasis is a MENA-region cryptocurrency exchange (Dubai VARA-licensed VASP) for buying, selling, and trading digital assets against the UAE Dirham (AED) and other fiat. Its v1 Exchange REST API and an official MCP server provide public market data and authenticated account, order, deposit, and withdrawal operations.
+
+## API
+- [BitOasis Exchange API (OpenAPI)](https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/openapi/bitoasis-exchange-openapi.yml): v1 REST API at https://api.bitoasis.net/v1 — markets, tickers, order books, trades, balances, banks, orders, and crypto/fiat deposits & withdrawals. Bearer API-token auth.
+
+## MCP
+- [BitOasis MCP server](https://github.com/bit-oasis/bitoasis-mcp): official first-party MCP server (PyPI `bitoasis-mcp`, `uvx bitoasis-mcp`); remote SSE at https://mcp.bitoasis.net/sse. 23 tools over the v1 API.
+
+## Docs
+- [API documentation](https://api.bitoasis.net/doc/): full public API reference.
+- [API & documentation (support)](https://support.bitoasis.net/en/support/solutions/articles/29000035643-api-documentation)
+- [Token Management](https://bitoasis.net/en/settings/security/tokens): generate API tokens.
+- [Support](https://support.bitoasis.net/)
+- [Blog](https://blog.bitoasis.net/)
+- [Learn](https://learn.bitoasis.net/en)
+
+## Artifacts
+- [Authentication](https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/authentication/bitoasis-authentication.yml)
+- [Conventions](https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/conventions/bitoasis-conventions.yml)
+- [Error catalog](https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/errors/bitoasis-problem-types.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/data-model/bitoasis-data-model.yml)
+- [Agent skills](https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/skills/_index.yml)
+
+## Legal
+- [Terms of Service](https://bitoasis.net/en/page/terms-of-service)
+- [Privacy Policy](https://bitoasis.net/en/page/privacy-policy)
+- [Legal & Compliance](https://bitoasis.net/en/page/legal-and-compliance)

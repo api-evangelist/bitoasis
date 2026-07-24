@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/bitoasis-exchange-openapi.yml
+format: http-status
+notes: >-
+  Derived from the HTTP status responses on the OpenAPI (itself derived from
+  BitOasis' first-party MCP client, which calls raise_for_status on non-2xx).
+  BitOasis does not publish a structured RFC 9457 application/problem+json error
+  envelope on the accessible surface, so these are the transport-level status
+  semantics rather than a documented problem-type registry.
+problems:
+  - status: 400
+    title: Bad request
+    meaning: >-
+      Invalid or missing parameters (e.g. malformed order body, unsupported
+      pair, invalid amount).
+    on_operations: [placeOrder, newCoinWithdrawal, newFiatWithdrawal]
+  - status: 401
+    title: Unauthorized
+    meaning: >-
+      Missing, invalid, or insufficiently-permissioned API token. Public
+      market-data endpoints do not require auth; all account/order/deposit/
+      withdrawal endpoints do.
+    on_operations: [getBalances, getBanks, getOrders, getOrder, placeOrder, cancelOrder]
+  - status: 404
+    title: Not found
+    meaning: Referenced resource (pair, order, deposit, withdrawal) does not exist.
+    on_operations: [getTicker, getOrder, cancelOrder, getCoinDeposit, getCoinWithdrawal, getFiatDeposit, getFiatWithdrawal]
+  - status: 429
+    title: Too many requests
+    meaning: Rate limit exceeded (limits not publicly documented).
+  - status: 500
+    title: Internal server error
+    meaning: Unexpected server-side error.

@@ -1,27 +1,210 @@
 aid: bitoasis
 name: BitOasis
-description: 'BitOasis is a company surfaced as a portfolio company of pantera-capital and added to the
-  API Evangelist network as a stub for enrichment. Sector: crypto. This profile is a lead awaiting the
-  enrichment pipeline.'
+description: >-
+  BitOasis is a Middle East and North Africa (MENA) cryptocurrency exchange,
+  licensed as a Virtual Asset Service Provider by Dubai's Virtual Assets
+  Regulatory Authority (VARA). It lets customers buy, sell, and trade Bitcoin,
+  Ether, XRP, and other digital assets against the UAE Dirham (AED) and other
+  fiat currencies. BitOasis exposes a public v1 Exchange REST API
+  (https://api.bitoasis.net/v1) covering market data (markets, tickers, order
+  books, trades) and authenticated account operations (balances, banks, Pro
+  order placement and cancellation, and crypto and fiat deposits and
+  withdrawals), authenticated with a Bearer API token. BitOasis also publishes
+  an official open-source MCP server (bitoasis-mcp) that exposes the exchange as
+  23 tools for AI agents, over stdio or a hosted SSE endpoint. Originally added
+  to the API Evangelist network as a pantera-capital portfolio lead, this
+  profile has been enriched from BitOasis' first-party public developer surface.
 url: https://raw.githubusercontent.com/api-evangelist/bitoasis/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://bitoasis.net/favicon.ico
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - pantera-capital
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Crypto
-apis: []
+- Cryptocurrency
+- Exchange
+- Trading
+- Digital Assets
+- Bitcoin
+- MENA
+- Fintech
+- MCP
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: bitoasis:bitoasis-account-api
+  name: BitOasis Account API
+  description: Authenticated account balances and registered banks.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-account-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-coin-deposits-api
+  name: BitOasis Coin Deposits API
+  description: Digital-asset deposit history and address generation.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Coin Deposits
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-coin-deposits-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-coin-withdrawals-api
+  name: BitOasis Coin Withdrawals API
+  description: Digital-asset withdrawal history, fees, and creation.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Coin Withdrawals
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-coin-withdrawals-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-fiat-deposits-api
+  name: BitOasis Fiat Deposits API
+  description: Fiat deposit history.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Fiat Deposits
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-fiat-deposits-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-fiat-withdrawals-api
+  name: BitOasis Fiat Withdrawals API
+  description: Fiat withdrawal history, creation, and cancellation.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Fiat Withdrawals
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-fiat-withdrawals-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-market-data-api
+  name: BitOasis Market Data API
+  description: Public market data endpoints (no authentication required).
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-orders-api
+  name: BitOasis Orders API
+  description: Place, cancel, and read Pro exchange orders.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-orders-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
 common:
 - type: Website
   url: https://bitoasis.net/en/home
+- type: DeveloperPortal
+  url: https://api.bitoasis.net/doc/
+- type: Documentation
+  url: https://api.bitoasis.net/doc/
+- type: APIReference
+  url: https://api.bitoasis.net/doc/
+- type: GettingStarted
+  url: https://support.bitoasis.net/en/support/solutions/articles/29000035643-api-documentation
+- type: Support
+  url: https://support.bitoasis.net/
+- type: Blog
+  url: https://blog.bitoasis.net/
+- type: GitHubOrganization
+  url: https://github.com/bit-oasis
+- type: TermsOfService
+  url: https://bitoasis.net/en/page/terms-of-service
+- type: PrivacyPolicy
+  url: https://bitoasis.net/en/page/privacy-policy
+- type: Compliance
+  url: https://bitoasis.net/en/page/legal-and-compliance
+- type: MCPServer
+  url: mcp/bitoasis-mcp.yml
+- type: Packages
+  url: packages/bitoasis-packages.yml
+- type: SDKs
+  url: packages/bitoasis-packages.yml
+- type: Authentication
+  url: authentication/bitoasis-authentication.yml
+- type: Conventions
+  url: conventions/bitoasis-conventions.yml
+- type: ErrorCatalog
+  url: errors/bitoasis-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/bitoasis-lifecycle.yml
+- type: DataModel
+  url: data-model/bitoasis-data-model.yml
+- type: Sandbox
+  url: sandbox/bitoasis-sandbox.yml
+- type: Conformance
+  url: conformance/bitoasis-conformance.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/bitoasis-llms.txt
+- type: DomainSecurity
+  url: security/bitoasis-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/bitoasis-agentic-access.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

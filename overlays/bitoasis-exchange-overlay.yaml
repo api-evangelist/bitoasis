@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for BitOasis Exchange API
+  version: 1.0.0
+extends: openapi/bitoasis-exchange-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provenance:
+        method: derived
+        source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+        note: >-
+          Spec derived faithfully from BitOasis' first-party open-source MCP
+          client; enrich against https://api.bitoasis.net/doc/ when reachable.
+      x-apievangelist-region: MENA
+      x-apievangelist-regulator: VARA (Dubai)
+  - target: $.info
+    update:
+      x-agentic-access:
+        summary: agentic-access/bitoasis-agentic-access.yml
+  - target: $.paths['/exchange/order'].post
+    update:
+      x-agentic-consequence: physical
+      x-agentic-note: >-
+        Placing an order moves real funds; agents should require confirmation
+        and prefer test=true validation first.
+  - target: $.paths['/exchange/coin-withdrawal'].post
+    update:
+      x-agentic-consequence: physical
+      x-agentic-note: Irreversible on-chain transfer; treat as safety-critical.
+  - target: $.paths['/exchange/fiat-withdrawal'].post
+    update:
+      x-agentic-consequence: physical
+      x-agentic-note: Moves fiat to an external bank; require human confirmation.

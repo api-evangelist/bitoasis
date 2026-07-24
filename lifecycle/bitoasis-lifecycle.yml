@@ -1,0 +1,24 @@
+generated: '2026-07-18'
+method: derived
+source: >-
+  openapi/bitoasis-exchange-openapi.yml ; https://api.bitoasis.net/v1 ;
+  https://support.bitoasis.net/en/support/solutions/articles/29000035643-api-documentation
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.bitoasis.net/v1
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  notes: No public deprecation policy or RFC 8594 Sunset/Deprecation header support was found.
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+deprecated_operations: []
+notes: >-
+  The support portal states the full API documentation "is publicly available
+  and regularly updated" at https://api.bitoasis.net/doc/, but no dedicated
+  status page (status.bitoasis.net did not resolve) or formal versioning/
+  deprecation policy is published on the accessible surface. Only the v1 base
+  path is exposed.

@@ -1,0 +1,26 @@
+{
+  "provider": "bitoasis",
+  "sources": [
+    "bitoasis-account-api-openapi.yml",
+    "bitoasis-coin-deposits-api-openapi.yml",
+    "bitoasis-coin-withdrawals-api-openapi.yml",
+    "bitoasis-fiat-deposits-api-openapi.yml",
+    "bitoasis-fiat-withdrawals-api-openapi.yml",
+    "bitoasis-market-data-api-openapi.yml",
+    "bitoasis-orders-api-openapi.yml"
+  ],
+  "outputs": [
+    "bitoasis-account-api-openapi.yml",
+    "bitoasis-coin-deposits-api-openapi.yml",
+    "bitoasis-coin-withdrawals-api-openapi.yml",
+    "bitoasis-fiat-deposits-api-openapi.yml",
+    "bitoasis-fiat-withdrawals-api-openapi.yml",
+    "bitoasis-market-data-api-openapi.yml",
+    "bitoasis-orders-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,32 @@
+generated: '2026-07-18'
+method: derived
+source: >-
+  openapi/bitoasis-exchange-openapi.yml ;
+  https://bitoasis.net/en/page/legal-and-compliance
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: Auth is a Bearer API token (Key+Secret), not an OAuth2 authorization flow.
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: No application/problem+json envelope documented; errors are plain HTTP status codes.
+  - id: bearer-token-auth
+    conforms: true
+    evidence: openapi securityScheme type http scheme bearer
+  - id: pagination-offset-limit
+    conforms: true
+    evidence: List operations accept offset/limit/from_date parameters.
+regulatory:
+  - id: vara-dubai
+    label: Dubai Virtual Assets Regulatory Authority (VARA) licensed VASP
+    conforms: true
+    evidence: https://bitoasis.net/en/page/legal-and-compliance
+    notes: >-
+      BitOasis is a Virtual Asset Service Provider licensed by Dubai's VARA;
+      regional entities operate under additional local regulators (e.g. Bahrain).
+notes: >-
+  Regulatory licensing (VARA) is a published compliance posture. Standard
+  security certifications (SOC 2 / ISO 27001 / PCI DSS) were not found published
+  on the accessible surface, so none are asserted here.

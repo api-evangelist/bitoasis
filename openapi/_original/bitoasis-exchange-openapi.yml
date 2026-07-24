@@ -1,0 +1,504 @@
+openapi: 3.1.0
+info:
+  title: BitOasis Exchange API
+  version: v1
+  description: >-
+    The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides
+    public market data (markets, tickers, order books, trades) and authenticated
+    account operations (balances, banks, order placement/cancellation, and crypto
+    and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham
+    (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token
+    generated from Settings > Security > Token Management. This description is
+    derived faithfully from BitOasis' first-party open-source MCP client
+    (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the
+    same https://api.bitoasis.net/v1 REST surface documented at
+    https://api.bitoasis.net/doc/.
+  x-provenance:
+    generated: '2026-07-18'
+    method: derived
+    source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+  contact:
+    name: BitOasis Support
+    email: support@bitoasis.net
+    url: https://support.bitoasis.net/
+  license:
+    name: Proprietary
+servers:
+  - url: https://api.bitoasis.net/v1
+    description: Production
+tags:
+  - name: Market Data
+    description: Public market data endpoints (no authentication required).
+  - name: Account
+    description: Authenticated account balances and registered banks.
+  - name: Orders
+    description: Place, cancel, and read Pro exchange orders.
+  - name: Coin Deposits
+    description: Digital-asset deposit history and address generation.
+  - name: Coin Withdrawals
+    description: Digital-asset withdrawal history, fees, and creation.
+  - name: Fiat Deposits
+    description: Fiat deposit history.
+  - name: Fiat Withdrawals
+    description: Fiat withdrawal history, creation, and cancellation.
+security:
+  - bearerAuth: []
+paths:
+  /exchange/markets:
+    get:
+      operationId: getMarkets
+      tags: [Market Data]
+      summary: List markets
+      description: List all tokens and trading pairs available on the exchange.
+      security: []
+      responses:
+        '200':
+          description: Markets list.
+  /exchange/ticker/{pair}:
+    get:
+      operationId: getTicker
+      tags: [Market Data]
+      summary: Get ticker
+      description: Current price and ticker for a trading pair (e.g. BTC-AED).
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Pair'
+      responses:
+        '200':
+          description: Ticker for the pair.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/order-book/{pair}:
+    get:
+      operationId: getOrderBook
+      tags: [Market Data]
+      summary: Get order book
+      description: Bids and asks for a trading pair.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Pair'
+        - name: bids_limit
+          in: query
+          required: false
+          schema: { type: integer }
+        - name: asks_limit
+          in: query
+          required: false
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Order book for the pair.
+  /exchange/trades/{pair}:
+    get:
+      operationId: getTrades
+      tags: [Market Data]
+      summary: Get recent trades
+      description: Recent public trade history for a trading pair.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Pair'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Recent trades for the pair.
+  /exchange/balances:
+    get:
+      operationId: getBalances
+      tags: [Account]
+      summary: Get balances
+      description: Your balances across all currencies.
+      responses:
+        '200':
+          description: Balances.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/banks:
+    get:
+      operationId: getBanks
+      tags: [Account]
+      summary: Get banks
+      description: Your registered bank accounts.
+      responses:
+        '200':
+          description: Registered banks.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/orders/{pair}:
+    get:
+      operationId: getOrders
+      tags: [Orders]
+      summary: List orders
+      description: List orders for a pair, filterable by status (OPEN/DONE/CANCELED).
+      parameters:
+        - $ref: '#/components/parameters/Pair'
+        - name: status
+          in: query
+          required: false
+          schema: { type: string, enum: [OPEN, DONE, CANCELED] }
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Orders for the pair.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/order/{order_id}:
+    get:
+      operationId: getOrder
+      tags: [Orders]
+      summary: Get order
+      description: Order details by ID.
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Order details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/order:
+    post:
+      operationId: placeOrder
+      tags: [Orders]
+      summary: Place order
+      description: >-
+        Place a limit, market, stop, or stop_limit order. Pass test=true to
+        validate the order without executing it (sandbox / dry-run mode).
+      parameters:
+        - name: test
+          in: query
+          required: false
+          description: When true, validates the order without placing it.
+          schema: { type: boolean }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pair, side, type, amount]
+              properties:
+                pair: { type: string, example: BTC-AED }
+                side: { type: string, enum: [buy, sell] }
+                type: { type: string, enum: [limit, market, stop, stop_limit] }
+                amount: { type: string }
+                price: { type: string }
+                stop_price: { type: string }
+      responses:
+        '200':
+          description: Order placed (or validated when test=true).
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/cancel-order:
+    post:
+      operationId: cancelOrder
+      tags: [Orders]
+      summary: Cancel order
+      description: Cancel an open order by ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id: { type: integer }
+      responses:
+        '200':
+          description: Order canceled.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/coin-deposits/{currency}:
+    get:
+      operationId: getCoinDeposits
+      tags: [Coin Deposits]
+      summary: List coin deposits
+      description: Crypto deposit history for a currency.
+      parameters:
+        - $ref: '#/components/parameters/Currency'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Coin deposits.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/coin-deposit/{deposit_id}:
+    get:
+      operationId: getCoinDeposit
+      tags: [Coin Deposits]
+      summary: Get coin deposit
+      description: Crypto deposit details by ID.
+      parameters:
+        - name: deposit_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Coin deposit details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/coin-deposit:
+    post:
+      operationId: newCoinDepositAddress
+      tags: [Coin Deposits]
+      summary: New coin deposit address
+      description: Generate a deposit address for a currency (optionally on a network).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currency]
+              properties:
+                currency: { type: string }
+                network: { type: string }
+      responses:
+        '200':
+          description: Deposit address generated.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/coin-withdrawals/{currency}:
+    get:
+      operationId: getCoinWithdrawals
+      tags: [Coin Withdrawals]
+      summary: List coin withdrawals
+      description: Crypto withdrawal history for a currency.
+      parameters:
+        - $ref: '#/components/parameters/Currency'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Coin withdrawals.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/coin-withdrawal/{withdrawal_id}:
+    get:
+      operationId: getCoinWithdrawal
+      tags: [Coin Withdrawals]
+      summary: Get coin withdrawal
+      description: Crypto withdrawal details by ID.
+      parameters:
+        - name: withdrawal_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Coin withdrawal details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/coin-withdrawal:
+    post:
+      operationId: newCoinWithdrawal
+      tags: [Coin Withdrawals]
+      summary: New coin withdrawal
+      description: Withdraw crypto to an external address.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currency, amount, withdrawal_address]
+              properties:
+                currency: { type: string }
+                amount: { type: string }
+                withdrawal_address: { type: string }
+                withdrawal_address_id: { type: string }
+                network: { type: string }
+      responses:
+        '200':
+          description: Withdrawal created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/coin-withdrawal-fees:
+    get:
+      operationId: getCoinWithdrawalFees
+      tags: [Coin Withdrawals]
+      summary: Get coin withdrawal fees
+      description: Withdrawal fees per currency.
+      responses:
+        '200':
+          description: Withdrawal fees.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/fiat-deposits:
+    get:
+      operationId: getFiatDeposits
+      tags: [Fiat Deposits]
+      summary: List fiat deposits
+      description: Fiat deposit history.
+      parameters:
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Fiat deposits.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/fiat-deposit/{deposit_id}:
+    get:
+      operationId: getFiatDeposit
+      tags: [Fiat Deposits]
+      summary: Get fiat deposit
+      description: Fiat deposit details by ID.
+      parameters:
+        - name: deposit_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Fiat deposit details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/fiat-withdrawals:
+    get:
+      operationId: getFiatWithdrawals
+      tags: [Fiat Withdrawals]
+      summary: List fiat withdrawals
+      description: Fiat withdrawal history.
+      parameters:
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/FromDate'
+      responses:
+        '200':
+          description: Fiat withdrawals.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /exchange/fiat-withdrawal/{withdrawal_id}:
+    get:
+      operationId: getFiatWithdrawal
+      tags: [Fiat Withdrawals]
+      summary: Get fiat withdrawal
+      description: Fiat withdrawal details by ID.
+      parameters:
+        - name: withdrawal_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Fiat withdrawal details.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: cancelFiatWithdrawal
+      tags: [Fiat Withdrawals]
+      summary: Cancel fiat withdrawal
+      description: Cancel a pending fiat withdrawal.
+      parameters:
+        - name: withdrawal_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Fiat withdrawal canceled.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exchange/fiat-withdrawal:
+    post:
+      operationId: newFiatWithdrawal
+      tags: [Fiat Withdrawals]
+      summary: New fiat withdrawal
+      description: Withdraw fiat to a registered bank.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount:
+                  type: object
+                  required: [value, currency]
+                  properties:
+                    value: { type: string }
+                    currency: { type: string }
+                origin: { type: string }
+      responses:
+        '200':
+          description: Fiat withdrawal created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        API token generated at Settings > Security > Token Management, sent as
+        an Authorization: Bearer <token> header. Tokens carry granular read
+        permissions (Account Balance, deposit/withdrawal read access, Pro Order
+        read access) and optional trade/withdrawal write permissions.
+  parameters:
+    Pair:
+      name: pair
+      in: path
+      required: true
+      description: Trading pair, e.g. BTC-AED.
+      schema: { type: string, example: BTC-AED }
+    Currency:
+      name: currency
+      in: path
+      required: true
+      description: Currency code, e.g. BTC.
+      schema: { type: string, example: BTC }
+    Offset:
+      name: offset
+      in: query
+      required: false
+      schema: { type: integer }
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema: { type: integer }
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema: { type: string, format: date }
+  responses:
+    BadRequest:
+      description: Bad request.
+    Unauthorized:
+      description: Missing or invalid API token.
+    NotFound:
+      description: Resource not found.

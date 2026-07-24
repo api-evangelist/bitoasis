@@ -1,0 +1,23 @@
+generated: '2026-07-18'
+method: searched
+source: https://pypi.org/project/bitoasis-mcp/
+packages:
+  - language: python
+    registry: pypi
+    name: bitoasis-mcp
+    version: 0.2.0
+    url: https://pypi.org/project/bitoasis-mcp/
+    install: uvx bitoasis-mcp
+    official: true
+    kind: mcp-server
+    description: >-
+      Official BitOasis MCP server (BitOasis Technologies). Ships an httpx-based
+      async client for the https://api.bitoasis.net/v1 REST API plus MCP tool
+      bindings. Also runnable via Docker.
+    repo: https://github.com/bit-oasis/bitoasis-mcp
+notes: >-
+  BitOasis does not appear to publish a general-purpose first-party REST SDK on
+  npm/PyPI/Maven/NuGet/RubyGems/crates.io beyond the official bitoasis-mcp
+  package, which bundles a Python client for the v1 exchange API. The bit-oasis
+  GitHub org also hosts internal PHP libraries (bitoasis-common, coin) and a
+  bitfinex-api client, none published as first-party BitOasis API SDKs.

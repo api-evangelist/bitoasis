@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: bitoasis.net
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  2 12:27:29 2026 GMT
+  hsts: null
+- host: api.bitoasis.net
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 21 14:16:21 2026 GMT
+  hsts: null
+domains:
+- domain: bitoasis.net
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

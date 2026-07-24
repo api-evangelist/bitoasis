@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: probed
+hosts:
+  - host: https://api.bitoasis.net
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403
+  - host: https://bitoasis.net
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/openid-configuration
+        status: 200
+        result: not-a-well-known-doc
+        note: Returns the SPA index HTML (text/html), not an OIDC discovery document.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        result: not-a-well-known-doc
+        note: Returns SPA index HTML, not an RFC 8414 document.
+      - path: /.well-known/api-catalog
+        status: 200
+        result: not-a-well-known-doc
+        note: Returns SPA index HTML, not an RFC 9727 api-catalog.
+      - path: /.well-known/ai-plugin.json
+        status: 403
+notes: >-
+  No real /.well-known discovery documents are served. api.bitoasis.net sits
+  behind Cloudflare (403 to non-browser clients); bitoasis.net returns its SPA
+  index HTML for arbitrary /.well-known paths (soft-200), so none of the 200s
+  are genuine well-known artifacts. No security.txt was recoverable.

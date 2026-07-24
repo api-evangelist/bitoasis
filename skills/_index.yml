@@ -1,0 +1,12 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/bitoasis-exchange-openapi.yml
+skills:
+  - file: bitoasis-place-and-manage-order.md
+    name: Place and manage a BitOasis order
+    api: openapi/bitoasis-exchange-openapi.yml
+    operations: [getTicker, getOrderBook, placeOrder, getOrder, getOrders, cancelOrder]
+  - file: bitoasis-withdraw-funds.md
+    name: Withdraw funds from BitOasis
+    api: openapi/bitoasis-exchange-openapi.yml
+    operations: [getBalances, getBanks, getCoinWithdrawalFees, newCoinWithdrawal, getCoinWithdrawal, newFiatWithdrawal, getFiatWithdrawal, cancelFiatWithdrawal]

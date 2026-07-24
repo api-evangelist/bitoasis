@@ -1,0 +1,60 @@
+generated: '2026-07-18'
+method: derived
+source: >-
+  openapi/bitoasis-exchange-openapi.yml (derived from bit-oasis/bitoasis-mcp
+  client.py) ; https://api.bitoasis.net/doc/
+authentication:
+  style: bearer-token
+  header: Authorization
+  detail: authentication/bitoasis-authentication.yml
+base_url: https://api.bitoasis.net/v1
+versioning:
+  scheme: uri-path
+  current: v1
+  detail: lifecycle/bitoasis-lifecycle.yml
+content_type: application/json
+pagination:
+  style: offset-limit
+  params:
+    - offset
+    - limit
+    - from_date
+  applies_to:
+    - getOrders
+    - getCoinDeposits
+    - getCoinWithdrawals
+    - getFiatDeposits
+    - getFiatWithdrawals
+    - getTrades
+  notes: >-
+    List endpoints accept offset/limit for paging and an optional from_date
+    (ISO date) lower bound. get_trades uses limit + from_date without offset.
+idempotency:
+  supported: false
+  notes: >-
+    No documented idempotency-key header or parameter. placeOrder supports a
+    test=true query parameter for non-executing validation (dry run), but that
+    is a sandbox/validation switch, not a replay-safe idempotency key.
+identifiers:
+  pairs: 'BASE-QUOTE, e.g. BTC-AED (fiat quote currency)'
+  order_id: integer
+  deposit_id: integer
+  withdrawal_id: integer
+error_envelope:
+  format: http-status
+  detail: errors/bitoasis-problem-types.yml
+  notes: >-
+    Errors are signaled via HTTP status codes (4xx/5xx). The MCP client raises
+    on non-2xx responses. A structured RFC 9457 problem envelope is not
+    documented on the public surface.
+rate_limits:
+  documented: unknown
+  notes: >-
+    Rate limits are not published on the accessible public surface; the full
+    reference at https://api.bitoasis.net/doc/ is behind an access gate.
+cross_links:
+  authentication: authentication/bitoasis-authentication.yml
+  errors: errors/bitoasis-problem-types.yml
+  lifecycle: lifecycle/bitoasis-lifecycle.yml
+  data_model: data-model/bitoasis-data-model.yml
+  sandbox: sandbox/bitoasis-sandbox.yml
