@@ -1,0 +1,120 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BitOasis Exchange Account Orders API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/orders/:pair",
+            "params": [
+              {
+                "name": "pair",
+                "value": "",
+                "type": "path",
+                "description": "Trading pair, e.g. BTC-AED."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO date to filter results from."
+              }
+            ]
+          },
+          "docs": "List orders for a pair, filterable by status (OPEN/DONE/CANCELED)."
+        },
+        {
+          "info": {
+            "name": "Get order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/order/:order_id",
+            "params": [
+              {
+                "name": "order_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Order details by ID."
+        },
+        {
+          "info": {
+            "name": "Place order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.bitoasis.net/v1/exchange/order",
+            "params": [
+              {
+                "name": "test",
+                "value": "",
+                "type": "query",
+                "description": "When true, validates the order without placing it."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Place a limit, market, stop, or stop_limit order. Pass test=true to validate the order without executing it (sandbox / dry-run mode)."
+        },
+        {
+          "info": {
+            "name": "Cancel order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.bitoasis.net/v1/exchange/cancel-order",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancel an open order by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

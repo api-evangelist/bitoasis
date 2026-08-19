@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BitOasis Exchange Account Market Data API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Market Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List markets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/markets"
+          },
+          "docs": "List all tokens and trading pairs available on the exchange."
+        },
+        {
+          "info": {
+            "name": "Get ticker",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/ticker/:pair",
+            "params": [
+              {
+                "name": "pair",
+                "value": "",
+                "type": "path",
+                "description": "Trading pair, e.g. BTC-AED."
+              }
+            ]
+          },
+          "docs": "Current price and ticker for a trading pair (e.g. BTC-AED)."
+        },
+        {
+          "info": {
+            "name": "Get order book",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/order-book/:pair",
+            "params": [
+              {
+                "name": "pair",
+                "value": "",
+                "type": "path",
+                "description": "Trading pair, e.g. BTC-AED."
+              },
+              {
+                "name": "bids_limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "asks_limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Bids and asks for a trading pair."
+        },
+        {
+          "info": {
+            "name": "Get recent trades",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/trades/:pair",
+            "params": [
+              {
+                "name": "pair",
+                "value": "",
+                "type": "path",
+                "description": "Trading pair, e.g. BTC-AED."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO date to filter results from."
+              }
+            ]
+          },
+          "docs": "Recent public trade history for a trading pair."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,465 @@
+{
+  "item": [
+    {
+      "id": "bdf88302-7a17-479d-b333-1418facac601",
+      "name": "Market Data",
+      "description": {
+        "content": "Public market data endpoints (no authentication required).",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "52f73886-1588-4cad-b4a3-82faadee852c",
+          "name": "List markets",
+          "request": {
+            "name": "List markets",
+            "description": {
+              "content": "List all tokens and trading pairs available on the exchange.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "exchange",
+                "markets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ce0fc808-d91d-4459-a9ff-76dcc681c225",
+              "name": "Markets list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "exchange",
+                    "markets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "67f4dc89-fa1c-4f59-86a7-e8aaabba6ecf",
+          "name": "Get ticker",
+          "request": {
+            "name": "Get ticker",
+            "description": {
+              "content": "Current price and ticker for a trading pair (e.g. BTC-AED).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "exchange",
+                "ticker",
+                ":pair"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "pair",
+                  "description": "(Required) Trading pair, e.g. BTC-AED."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "381300f2-1037-439f-a306-e1be28de14bd",
+              "name": "Ticker for the pair.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "exchange",
+                    "ticker",
+                    ":pair"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pair",
+                      "description": "(Required) Trading pair, e.g. BTC-AED."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8e635524-b9af-464d-95cc-27ee3577f1f3",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "exchange",
+                    "ticker",
+                    ":pair"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pair",
+                      "description": "(Required) Trading pair, e.g. BTC-AED."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d753a331-b56d-4151-9bf9-5ac54708777c",
+          "name": "Get order book",
+          "request": {
+            "name": "Get order book",
+            "description": {
+              "content": "Bids and asks for a trading pair.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "exchange",
+                "order-book",
+                ":pair"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "bids_limit",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "asks_limit",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "pair",
+                  "description": "(Required) Trading pair, e.g. BTC-AED."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cafcf201-25ef-4702-b604-efe4b5faf0f1",
+              "name": "Order book for the pair.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "exchange",
+                    "order-book",
+                    ":pair"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "bids_limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "asks_limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pair",
+                      "description": "(Required) Trading pair, e.g. BTC-AED."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9041257f-6c0f-46a4-a80a-f8f93bdf55cd",
+          "name": "Get recent trades",
+          "request": {
+            "name": "Get recent trades",
+            "description": {
+              "content": "Recent public trade history for a trading pair.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "exchange",
+                "trades",
+                ":pair"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "from_date",
+                  "value": "<date>",
+                  "description": "ISO date to filter results from."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "pair",
+                  "description": "(Required) Trading pair, e.g. BTC-AED."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "96ec9f8b-1742-4698-a49c-c6fc9e538e34",
+              "name": "Recent trades for the pair.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "exchange",
+                    "trades",
+                    ":pair"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pair",
+                      "description": "(Required) Trading pair, e.g. BTC-AED."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.bitoasis.net/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5c3b8d62-e014-4373-a3e5-73c344eed776",
+    "name": "BitOasis Exchange Account Market Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides public market data (markets, tickers, order books, trades) and authenticated account operations (balances, banks, order placement/cancellation, and crypto and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token generated from Settings > Security > Token Management. This description is derived faithfully from BitOasis' first-party open-source MCP client (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the same https://api.bitoasis.net/v1 REST surface documented at https://api.bitoasis.net/doc/.\n\nContact Support:\n Name: BitOasis Support\n Email: support@bitoasis.net",
+      "type": "text/plain"
+    }
+  }
+}

@@ -4,21 +4,19 @@ status: published
 source: https://github.com/bit-oasis/bitoasis-mcp
 server:
   name: bitoasis
-  description: >-
-    Official first-party MCP server that exposes the BitOasis cryptocurrency
-    exchange API as tools for AI assistants. Published by BitOasis Technologies
-    on PyPI as bitoasis-mcp (MIT). Runs locally over stdio via uvx/Docker, or
-    remotely over SSE at the hosted endpoint.
+  description: Official first-party MCP server that exposes the BitOasis cryptocurrency exchange API as
+    tools for AI assistants. Published by BitOasis Technologies on PyPI as bitoasis-mcp (MIT). Runs locally
+    over stdio via uvx/Docker, or remotely over SSE at the hosted endpoint.
   vendor: BitOasis Technologies
   license: MIT
   transports:
-    - type: stdio
-      install: uvx bitoasis-mcp
-    - type: stdio
-      install: 'docker run -i --rm -e BITOASIS_API_KEY bitoasis-mcp'
-    - type: sse
-      url: https://mcp.bitoasis.net/sse
-      auth: 'Authorization: Bearer <api-token>'
+  - type: stdio
+    install: uvx bitoasis-mcp
+  - type: stdio
+    install: docker run -i --rm -e BITOASIS_API_KEY bitoasis-mcp
+  - type: sse
+    url: https://mcp.bitoasis.net/sse
+    auth: 'Authorization: Bearer <api-token>'
   package:
     registry: pypi
     name: bitoasis-mcp
@@ -26,77 +24,84 @@ server:
     url: https://pypi.org/project/bitoasis-mcp/
   auth:
     env: BITOASIS_API_KEY
-    note: >-
-      API token generated at Settings > Security > Token Management on
-      bitoasis.net (https://bitoasis.net/en/settings/security/tokens).
+    note: API token generated at Settings > Security > Token Management on bitoasis.net (https://bitoasis.net/en/settings/security/tokens).
 wraps_api: https://api.bitoasis.net/v1
 tools:
-  - name: get_markets
-    description: List all tokens and trading pairs
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getMarkets
-  - name: get_ticker
-    description: Current price for a pair (e.g. BTC-AED)
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getTicker
-  - name: get_order_book
-    description: Bids and asks for a pair
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getOrderBook
-  - name: get_trades
-    description: Recent public trade history
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getTrades
-  - name: get_balances
-    description: Your balances across all currencies
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getBalances
-  - name: get_banks
-    description: Your registered bank accounts
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getBanks
-  - name: get_orders
-    description: List orders for a pair (filter by OPEN/DONE/CANCELED)
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getOrders
-  - name: get_order
-    description: Order details by ID
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getOrder
-  - name: place_order
-    description: Place a limit, market, stop, or stop_limit order
-    source_operation: openapi/bitoasis-exchange-openapi.yml#placeOrder
-  - name: cancel_order
-    description: Cancel an open order
-    source_operation: openapi/bitoasis-exchange-openapi.yml#cancelOrder
-  - name: get_coin_deposits
-    description: Crypto deposit history
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinDeposits
-  - name: get_coin_deposit
-    description: Crypto deposit details
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinDeposit
-  - name: new_coin_deposit_address
-    description: Generate a deposit address
-    source_operation: openapi/bitoasis-exchange-openapi.yml#newCoinDepositAddress
-  - name: get_fiat_deposits
-    description: Fiat deposit history
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatDeposits
-  - name: get_fiat_deposit
-    description: Fiat deposit details
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatDeposit
-  - name: get_coin_withdrawals
-    description: Crypto withdrawal history
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinWithdrawals
-  - name: get_coin_withdrawal
-    description: Crypto withdrawal details
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinWithdrawal
-  - name: new_coin_withdrawal
-    description: Withdraw crypto to an external address
-    source_operation: openapi/bitoasis-exchange-openapi.yml#newCoinWithdrawal
-  - name: get_coin_withdrawal_fees
-    description: Withdrawal fees per currency
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinWithdrawalFees
-  - name: get_fiat_withdrawals
-    description: Fiat withdrawal history
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatWithdrawals
-  - name: get_fiat_withdrawal
-    description: Fiat withdrawal details
-    source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatWithdrawal
-  - name: new_fiat_withdrawal
-    description: Withdraw fiat to a registered bank
-    source_operation: openapi/bitoasis-exchange-openapi.yml#newFiatWithdrawal
-  - name: cancel_fiat_withdrawal
-    description: Cancel a pending fiat withdrawal
-    source_operation: openapi/bitoasis-exchange-openapi.yml#cancelFiatWithdrawal
+- name: get_markets
+  description: List all tokens and trading pairs
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getMarkets
+- name: get_ticker
+  description: Current price for a pair (e.g. BTC-AED)
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getTicker
+- name: get_order_book
+  description: Bids and asks for a pair
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getOrderBook
+- name: get_trades
+  description: Recent public trade history
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getTrades
+- name: get_balances
+  description: Your balances across all currencies
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getBalances
+- name: get_banks
+  description: Your registered bank accounts
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getBanks
+- name: get_orders
+  description: List orders for a pair (filter by OPEN/DONE/CANCELED)
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getOrders
+- name: get_order
+  description: Order details by ID
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getOrder
+- name: place_order
+  description: Place a limit, market, stop, or stop_limit order
+  source_operation: openapi/bitoasis-exchange-openapi.yml#placeOrder
+- name: cancel_order
+  description: Cancel an open order
+  source_operation: openapi/bitoasis-exchange-openapi.yml#cancelOrder
+- name: get_coin_deposits
+  description: Crypto deposit history
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinDeposits
+- name: get_coin_deposit
+  description: Crypto deposit details
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinDeposit
+- name: new_coin_deposit_address
+  description: Generate a deposit address
+  source_operation: openapi/bitoasis-exchange-openapi.yml#newCoinDepositAddress
+- name: get_fiat_deposits
+  description: Fiat deposit history
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatDeposits
+- name: get_fiat_deposit
+  description: Fiat deposit details
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatDeposit
+- name: get_coin_withdrawals
+  description: Crypto withdrawal history
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinWithdrawals
+- name: get_coin_withdrawal
+  description: Crypto withdrawal details
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinWithdrawal
+- name: new_coin_withdrawal
+  description: Withdraw crypto to an external address
+  source_operation: openapi/bitoasis-exchange-openapi.yml#newCoinWithdrawal
+- name: get_coin_withdrawal_fees
+  description: Withdrawal fees per currency
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getCoinWithdrawalFees
+- name: get_fiat_withdrawals
+  description: Fiat withdrawal history
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatWithdrawals
+- name: get_fiat_withdrawal
+  description: Fiat withdrawal details
+  source_operation: openapi/bitoasis-exchange-openapi.yml#getFiatWithdrawal
+- name: new_fiat_withdrawal
+  description: Withdraw fiat to a registered bank
+  source_operation: openapi/bitoasis-exchange-openapi.yml#newFiatWithdrawal
+- name: cancel_fiat_withdrawal
+  description: Cancel a pending fiat withdrawal
+  source_operation: openapi/bitoasis-exchange-openapi.yml#cancelFiatWithdrawal
+deployment:
+  mode: none
+  endpoint: https://mcp.bitoasis.net/sse
+  verified: probed
+  probe: dead
+  note: the endpoint this manifest claimed did not answer; recorded as none rather than deleted so the
+    claim stays auditable
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,103 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BitOasis Exchange Account Coin Withdrawals API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Coin Withdrawals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List coin withdrawals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-withdrawals/:currency",
+            "params": [
+              {
+                "name": "currency",
+                "value": "",
+                "type": "path",
+                "description": "Currency code, e.g. BTC."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO date to filter results from."
+              }
+            ]
+          },
+          "docs": "Crypto withdrawal history for a currency."
+        },
+        {
+          "info": {
+            "name": "Get coin withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-withdrawal/:withdrawal_id",
+            "params": [
+              {
+                "name": "withdrawal_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Crypto withdrawal details by ID."
+        },
+        {
+          "info": {
+            "name": "New coin withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-withdrawal",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Withdraw crypto to an external address."
+        },
+        {
+          "info": {
+            "name": "Get coin withdrawal fees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-withdrawal-fees"
+          },
+          "docs": "Withdrawal fees per currency."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

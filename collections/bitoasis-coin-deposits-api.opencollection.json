@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BitOasis Exchange Account Coin Deposits API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Coin Deposits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List coin deposits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-deposits/:currency",
+            "params": [
+              {
+                "name": "currency",
+                "value": "",
+                "type": "path",
+                "description": "Currency code, e.g. BTC."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO date to filter results from."
+              }
+            ]
+          },
+          "docs": "Crypto deposit history for a currency."
+        },
+        {
+          "info": {
+            "name": "Get coin deposit",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-deposit/:deposit_id",
+            "params": [
+              {
+                "name": "deposit_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Crypto deposit details by ID."
+        },
+        {
+          "info": {
+            "name": "New coin deposit address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.bitoasis.net/v1/exchange/coin-deposit",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a deposit address for a currency (optionally on a network)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

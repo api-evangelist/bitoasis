@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BitOasis Exchange Account API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/balances"
+          },
+          "docs": "Your balances across all currencies."
+        },
+        {
+          "info": {
+            "name": "Get banks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/banks"
+          },
+          "docs": "Your registered bank accounts."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

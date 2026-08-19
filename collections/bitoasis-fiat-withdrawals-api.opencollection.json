@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BitOasis Exchange Account Fiat Withdrawals API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fiat Withdrawals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List fiat withdrawals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/fiat-withdrawals",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query",
+                "description": "ISO date to filter results from."
+              }
+            ]
+          },
+          "docs": "Fiat withdrawal history."
+        },
+        {
+          "info": {
+            "name": "Get fiat withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bitoasis.net/v1/exchange/fiat-withdrawal/:withdrawal_id",
+            "params": [
+              {
+                "name": "withdrawal_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Fiat withdrawal details by ID."
+        },
+        {
+          "info": {
+            "name": "Cancel fiat withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.bitoasis.net/v1/exchange/fiat-withdrawal/:withdrawal_id",
+            "params": [
+              {
+                "name": "withdrawal_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Cancel a pending fiat withdrawal."
+        },
+        {
+          "info": {
+            "name": "New fiat withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.bitoasis.net/v1/exchange/fiat-withdrawal",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Withdraw fiat to a registered bank."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
