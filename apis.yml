@@ -144,6 +144,8 @@ apis:
   humanURL: https://api.bitoasis.net/doc/
   baseURL: https://api.bitoasis.net/v1
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
