@@ -1,8 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: BitOasis Exchange Account Orders API
+  title: BitOasis Exchange Orders API
   version: v1
-  description: The BitOasis Exchange REST API for the MENA region's crypto exchange. Provides public market data (markets, tickers, order books, trades) and authenticated account operations (balances, banks, order placement/cancellation, and crypto and fiat deposits/withdrawals). Trading pairs are quoted against the UAE Dirham (AED) and other fiat, e.g. BTC-AED. Authentication uses a Bearer API token generated from Settings > Security > Token Management. This description is derived faithfully from BitOasis' first-party open-source MCP client (github.com/bit-oasis/bitoasis-mcp, src/bitoasis_mcp/client.py) which wraps the same https://api.bitoasis.net/v1 REST surface documented at https://api.bitoasis.net/doc/.
+  description: The BitOasis Exchange REST API for the MENA region's crypto exchange.
   x-provenance:
     generated: '2026-07-18'
     method: derived
@@ -149,21 +149,13 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    BadRequest:
-      description: Bad request.
     Unauthorized:
       description: Missing or invalid API token.
+    BadRequest:
+      description: Bad request.
     NotFound:
       description: Resource not found.
   parameters:
-    Pair:
-      name: pair
-      in: path
-      required: true
-      description: Trading pair, e.g. BTC-AED.
-      schema:
-        type: string
-        example: BTC-AED
     FromDate:
       name: from_date
       in: query
@@ -172,14 +164,22 @@ components:
       schema:
         type: string
         format: date
-    Limit:
-      name: limit
+    Pair:
+      name: pair
+      in: path
+      required: true
+      description: Trading pair, e.g. BTC-AED.
+      schema:
+        type: string
+        example: BTC-AED
+    Offset:
+      name: offset
       in: query
       required: false
       schema:
         type: integer
-    Offset:
-      name: offset
+    Limit:
+      name: limit
       in: query
       required: false
       schema:
