@@ -87,15 +87,10 @@ paths:
         '200':
           description: Recent trades for the pair.
 components:
+  responses:
+    NotFound:
+      description: Resource not found.
   parameters:
-    FromDate:
-      name: from_date
-      in: query
-      required: false
-      description: ISO date to filter results from.
-      schema:
-        type: string
-        format: date
     Pair:
       name: pair
       in: path
@@ -110,9 +105,14 @@ components:
       required: false
       schema:
         type: integer
-  responses:
-    NotFound:
-      description: Resource not found.
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema:
+        type: string
+        format: date
   securitySchemes:
     bearerAuth:
       type: http

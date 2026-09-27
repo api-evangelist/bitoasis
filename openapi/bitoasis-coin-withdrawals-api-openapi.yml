@@ -107,22 +107,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API token.
-    BadRequest:
-      description: Bad request.
-    NotFound:
-      description: Resource not found.
   parameters:
-    FromDate:
-      name: from_date
-      in: query
-      required: false
-      description: ISO date to filter results from.
-      schema:
-        type: string
-        format: date
     Currency:
       name: currency
       in: path
@@ -137,12 +122,27 @@ components:
       required: false
       schema:
         type: integer
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema:
+        type: string
+        format: date
     Limit:
       name: limit
       in: query
       required: false
       schema:
         type: integer
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+    BadRequest:
+      description: Bad request.
+    NotFound:
+      description: Resource not found.
   securitySchemes:
     bearerAuth:
       type: http
