@@ -148,21 +148,14 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+    NotFound:
+      description: Resource not found.
+    BadRequest:
+      description: Bad request.
   parameters:
-    Offset:
-      name: offset
-      in: query
-      required: false
-      schema:
-        type: integer
-    FromDate:
-      name: from_date
-      in: query
-      required: false
-      description: ISO date to filter results from.
-      schema:
-        type: string
-        format: date
     Limit:
       name: limit
       in: query
@@ -177,13 +170,20 @@ components:
       schema:
         type: string
         example: BTC-AED
-  responses:
-    Unauthorized:
-      description: Missing or invalid API token.
-    BadRequest:
-      description: Bad request.
-    NotFound:
-      description: Resource not found.
+    FromDate:
+      name: from_date
+      in: query
+      required: false
+      description: ISO date to filter results from.
+      schema:
+        type: string
+        format: date
+    Offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
   securitySchemes:
     bearerAuth:
       type: http
