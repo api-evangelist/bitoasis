@@ -88,12 +88,6 @@ paths:
           description: Recent trades for the pair.
 components:
   parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      schema:
-        type: integer
     Pair:
       name: pair
       in: path
@@ -102,6 +96,12 @@ components:
       schema:
         type: string
         example: BTC-AED
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
     FromDate:
       name: from_date
       in: query
