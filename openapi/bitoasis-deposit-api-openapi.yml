@@ -1,0 +1,443 @@
+openapi: 3.2.0
+info:
+  title: BitOasis Public Deposit API
+  description: 'BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:
+
+
+    + A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).
+
+
+    + A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).
+
+
+    + A platform for trading in digital currencies (referred to as the “BitOasis Pro”).
+
+    + A platform that facilitates sending and receiving digital currencies.
+
+
+    + A platform that facilitates online and offline storage of clients’ digital assets.
+
+
+    The only services available for the public API are:
+
+
+    + Trading in digital currencies (referred to as the “BitOasis Pro”).
+
+
+    + Sending and receiving digital currencies.
+
+
+    And we are planning to provide a public API for the rest of the services in the near future.'
+  contact:
+    url: https://bitoasis.net/support
+  x-logo:
+    url: logo.svg
+    altText: BitOasis
+  version: '1.0'
+servers:
+- url: https://api.bitoasis.net/v1/
+  variables:
+    defaultHost:
+      default: https://api.bitoasis.net
+tags:
+- name: Deposit
+  description: ''
+paths:
+  /exchange/coin-deposits/{currency}:
+    get:
+      tags:
+      - Deposit
+      summary: Coin deposit History
+      description: Returns a list of digital currency deposits. The list is ordered by `data_created` in **descendant** order.
+      operationId: CoindepositHistory
+      parameters:
+      - name: currency
+        in: path
+        description: crypto currency symbol - [supported values](#tag/Supported-Currencies)
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: offset
+        description: start index, used for pagination.
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: integer
+          minimum: 0
+      - name: limit
+        in: query
+        description: number of records - used for pagination
+        style: form
+        explode: true
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+      - name: from_date
+        in: query
+        description: get all orders starting from this date
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Success response. Returns an array of digital currency deposits
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoinDepositResponse'
+              example:
+                deposits:
+                - id: 2
+                  amount:
+                    value: 100
+                    currency: XMR
+                  tx_hash: 088dd3e7b3f74385300fba3da2b8c8aa8ba640820b41d448501c1a01192c391c
+                  date_created: '2010-12-12T15:22:22+00:00'
+                  status: PENDING
+                  deposit_address:
+                    Address: 4BCeEPhodgPMbPWFN1dPwhWXdRX8q4mhhdZdA1dtSMLTLCEYvAj9QXjXAfF7CugEbmfBhgkqHbdgK9b2wKA6nqRZQCgvCDm
+                    Payment ID: 8faff639ed03900e6549a7ae664537ccbf04b442a60985e8300dcbd4e21f1fc4
+                    parsed_deposit_address:
+                      address: 4BCeEPhodgPMbPWFN1dPwhWXdRX8q4mhhdZdA1dtSMLTLCEYvAj9QXjXAfF7CugEbmfBhgkqHbdgK9b2wKA6nqRZQCgvCDm
+                      address_id: 8faff639ed03900e6549a7ae664537ccbf04b442a60985e8300dcbd4e21f1fc4
+                - id: 1
+                  amount:
+                    value: '0.22'
+                    currency: BTC
+                  tx_hash: 9d714181c03a953aec1333a3a1c11c4766d7c2ec1166af5bf9cccd721ef09e18
+                  date_created: '2015-02-10T15:11:22+00:00'
+                  status: DONE
+                  deposit_address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+                  parsed_deposit_address:
+                    address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+      deprecated: false
+  /exchange/coin-deposit/{id}:
+    get:
+      tags:
+      - Deposit
+      summary: Coin deposit detail
+      description: ''
+      operationId: Coindepositdetail
+      parameters:
+      - name: id
+        in: path
+        description: deposit ID
+        required: true
+        style: simple
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success response. Returns digital currency deposit details.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coindepositdetailresponse'
+              example:
+                deposit:
+                  id: 3
+                  amount:
+                    value: '0.02'
+                    currency: BTC
+                  tx_hash: 9654c06b2b94b73640095f1e73455767a42bbce3656b8c06968bbc7cfb9a1627
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: PENDING
+                  deposit_address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+                  parsed_deposit_address:
+                    address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+      deprecated: false
+  /exchange/coin-deposit:
+    post:
+      tags:
+      - Deposit
+      summary: New coin deposit
+      description: Success response. Returns the digital currency deposit address.
+      operationId: Newcoindeposit
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Newcoindepositrequest'
+            example:
+              currency: BTC
+              network: bitcoin
+        required: true
+      responses:
+        '201':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Newcoindepositresponse'
+              example:
+                currency: BTC
+                network: bitcoin
+                address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+                parsed_address:
+                  address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+      deprecated: false
+  /exchange/fiat-deposits:
+    get:
+      tags:
+      - Deposit
+      summary: Fiat deposit list
+      description: Success Response. Returns the history of fiat deposits
+      operationId: Fiatdepositlist
+      parameters:
+      - name: offset
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: maximal value is 1000
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: from_date
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fiatdepositlistresponse'
+              example:
+                deposits:
+                - id: 2
+                  code: GH3NK1
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: PENDING
+                  amount:
+                    value: '30.0'
+                    currency: AED
+                  fee:
+                    value: '0.0'
+                    currency: AED
+                  type: DEPOSIT_BY_WIRE
+                - id: 1
+                  code: AF6YPM
+                  date_created: '2015-02-10T15:11:22+00:00'
+                  status: DONE
+                  amount:
+                    value: '9.6'
+                    currency: AED
+                  fee:
+                    value: '0.4'
+                    currency: AED
+                  type: DEPOSIT_BY_KNET
+      deprecated: false
+  /exchange/fiat-deposit/{id}:
+    get:
+      tags:
+      - Deposit
+      summary: Fiat deposit detail
+      description: Success response. Returns the details of a specific fiat deposit
+      operationId: Fiatdepositdetail
+      parameters:
+      - name: id
+        in: path
+        description: deposit ID
+        required: true
+        style: simple
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fiatdepositdetailresponse'
+              example:
+                deposit:
+                  id: 2
+                  code: GH3NK1
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: PENDING
+                  amount:
+                    value: '10.0'
+                    currency: AED
+                  fee:
+                    value: '0.0'
+                    currency: AED
+                  type: DEPOSIT_BY_WIRE
+      deprecated: false
+components:
+  schemas:
+    CoinDepositResponse:
+      title: Coin Deposit Response
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Order identifier
+        amount:
+          allOf:
+          - type: object
+            title: Deposited amount
+          - $ref: '#/components/schemas/CoinAmount'
+        tx_hash:
+          type:
+          - string
+          - 'null'
+          title: Transaction hash
+          description: could be null when deposit is created between 2 different exchange wallets
+        date_created:
+          type: string
+          format: date
+          title: Deposit order creation date
+        status:
+          allOf:
+          - type: string
+            title: Deposit order status
+          - $ref: '#/components/schemas/CoinDepositStatus'
+        deposit_address:
+          type:
+          - string
+          - 'null'
+          title: Deposit address
+          description: could be null only in some negligible cases (system does not have the address, very old deposits)
+        parsed_deposit_address:
+          allOf:
+          - type: object
+            title: Parsed deposit address
+          - $ref: '#/components/schemas/CoinDepositAddress'
+    Newcoindepositrequest:
+      title: Newcoindepositrequest
+      required:
+      - currency
+      type: object
+      properties:
+        currency:
+          type: string
+          description: crypto currency symbol - [supported values](#tag/Supported-Currencies)
+        network:
+          type: string
+          description: Cryptocurrency network code. If not passed, default network will be selected. - [supported values](#tag/Supported-Networks)
+    CoinAmount:
+      title: Digital currency amount
+      type: object
+      properties:
+        amount:
+          type: string
+          title: Value
+        currency:
+          type: string
+          title: Currency
+    Coindepositdetailresponse:
+      title: Coindepositdetailresponse
+      type: object
+      properties:
+        tx_hash:
+          type:
+          - string
+          - 'null'
+          description: could be null when deposit is created between 2 different exchange wallets
+          example: null
+        status:
+          $ref: '#/components/schemas/CoinDepositStatus'
+        deposit_address:
+          type:
+          - string
+          - 'null'
+          description: could be null only in some negligible cases (system doesn't have the address, very old deposits)
+        parsed_deposit_address:
+          $ref: '#/components/schemas/CoinDepositAddress'
+    CoinDepositAddress:
+      title: Parsed Coin Deposit Address
+      type: object
+      properties:
+        address:
+          type: string
+          description: Digital currency address
+        address_id:
+          type:
+          - string
+          - 'null'
+          description: Digital currency address ID (Tag, Memo). Available only for cryprotcurrencies which support additional address identifiers (XRP, XLM)
+    Fiatdepositdetailresponse:
+      title: Fiatdepositdetailresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status7'
+        type:
+          $ref: '#/components/schemas/type'
+    Newcoindepositresponse:
+      title: Newcoindepositresponse
+      type: object
+      properties:
+        currency:
+          type: string
+        network:
+          type: string
+        address:
+          type: string
+        parsed_address:
+          $ref: '#/components/schemas/parsed_address'
+    CoinDepositStatus:
+      title: Coin Deposit Status
+      enum:
+      - UNCONFIRMED
+      - PENDING
+      - DONE
+      - CANCELED
+      type: string
+    Fiatdepositlistresponse:
+      title: Fiatdepositlistresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status7'
+        type:
+          $ref: '#/components/schemas/type'
+    parsed_address:
+      title: parsed_address
+      type: object
+      properties:
+        address:
+          type: string
+        address_id:
+          type:
+          - string
+          - 'null'
+          description: available only for cryprotcurrencies which support additional address identifiers (XRP, XLM)
+      description: in case of additional information included in address (e.g. XRP tag or XLM Memo) this item provides parsed address
+    status7:
+      title: status7
+      enum:
+      - UNCONFIRMED
+      - PENDING
+      - DONE
+      - CANCELED
+      - PROCESSING
+      type: string
+    type:
+      title: type
+      enum:
+      - DEPOSIT_BY_WIRE
+      - DEPOSIT_BY_KNET
+      - CASH_DEPOSIT
+      type: string

@@ -1,0 +1,181 @@
+openapi: 3.2.0
+info:
+  title: BitOasis Public Error responses API
+  description: 'BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:
+
+
+    + A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).
+
+
+    + A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).
+
+
+    + A platform for trading in digital currencies (referred to as the “BitOasis Pro”).
+
+    + A platform that facilitates sending and receiving digital currencies.
+
+
+    + A platform that facilitates online and offline storage of clients’ digital assets.
+
+
+    The only services available for the public API are:
+
+
+    + Trading in digital currencies (referred to as the “BitOasis Pro”).
+
+
+    + Sending and receiving digital currencies.
+
+
+    And we are planning to provide a public API for the rest of the services in the near future.'
+  contact:
+    url: https://bitoasis.net/support
+  x-logo:
+    url: logo.svg
+    altText: BitOasis
+  version: '1.0'
+servers:
+- url: https://api.bitoasis.net/v1/
+  variables:
+    defaultHost:
+      default: https://api.bitoasis.net
+tags:
+- name: Error responses
+  description: All API calls can generate those error responses bellow.
+paths:
+  /error-400:
+    get:
+      tags:
+      - Error responses
+      summary: 400 Invalid or required parameter
+      description: ''
+      operationId: 400Invalidorrequiredparameter
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+        '400':
+          description: Unexpected error in API call. See HTTP response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503Applicationexception503response'
+              example:
+                code: 400
+                status: error
+                message: currency_pair is required!
+      deprecated: false
+  /error-401:
+    get:
+      tags:
+      - Error responses
+      summary: 401 Unauthorized request
+      description: ''
+      operationId: 401Unauthorizedrequest
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+        '401':
+          description: Unexpected error in API call. See HTTP response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503Applicationexception503response'
+              example:
+                code: 401
+                status: error
+                message: The resource owner or authorization server denied the request.
+      deprecated: false
+  /error-403:
+    get:
+      tags:
+      - Error responses
+      summary: 403 Forbidden request
+      description: ''
+      operationId: 403Forbiddenrequest
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+        '403':
+          description: Unexpected error in API call. See HTTP response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503Applicationexception503response'
+              example:
+                code: 403
+                status: error
+                message: Your token is not allowed to do this action!
+      deprecated: false
+  /error-404:
+    get:
+      tags:
+      - Error responses
+      summary: 404 Content not found
+      description: Also known as Bad request.
+      operationId: 404Contentnotfound
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+        '404':
+          description: Unexpected error in API call. See HTTP response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503Applicationexception503response'
+              example:
+                code: 404
+                status: error
+                message: Deposit not found.
+      deprecated: false
+  /error-503:
+    get:
+      tags:
+      - Error responses
+      summary: 503 Application exception
+      description: Mostly occured when third party service is down.
+      operationId: 503Applicationexception
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+        '503':
+          description: Unexpected error in API call. See HTTP response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503Applicationexception503response'
+              example:
+                code: 503
+                status: error
+                message: Service is temporarily unavailable, please try again later.
+      deprecated: false
+components:
+  schemas:
+    503Applicationexception503response:
+      title: 503Applicationexception503response
+      required:
+      - code
+      - status
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        status:
+          type: string
+        message:
+          type: string
+      example:
+        code: 503
+        status: error
+        message: Service is temporarily unavailable, please try again later.

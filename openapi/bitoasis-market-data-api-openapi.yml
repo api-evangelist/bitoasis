@@ -1,120 +1,362 @@
 openapi: 3.2.0
 info:
-  title: BitOasis Exchange Market Data API
-  version: v1
-  description: The BitOasis Exchange REST API for the MENA region's crypto exchange.
-  x-provenance:
-    generated: '2026-07-18'
-    method: derived
-    source: https://raw.githubusercontent.com/bit-oasis/bitoasis-mcp/main/src/bitoasis_mcp/client.py
+  title: BitOasis Public Market Data API
+  description: 'BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:
+
+
+    + A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).
+
+
+    + A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).
+
+
+    + A platform for trading in digital currencies (referred to as the “BitOasis Pro”).
+
+    + A platform that facilitates sending and receiving digital currencies.
+
+
+    + A platform that facilitates online and offline storage of clients’ digital assets.
+
+
+    The only services available for the public API are:
+
+
+    + Trading in digital currencies (referred to as the “BitOasis Pro”).
+
+
+    + Sending and receiving digital currencies.
+
+
+    And we are planning to provide a public API for the rest of the services in the near future.'
   contact:
-    name: BitOasis Support
-    email: support@bitoasis.net
-    url: https://support.bitoasis.net/
-  license:
-    name: Proprietary
+    url: https://bitoasis.net/support
+  x-logo:
+    url: logo.svg
+    altText: BitOasis
+  version: '1.0'
 servers:
-- url: https://api.bitoasis.net/v1
-  description: Production
-security:
-- bearerAuth: []
+- url: https://api.bitoasis.net/v1/
+  variables:
+    defaultHost:
+      default: https://api.bitoasis.net
 tags:
 - name: Market Data
-  description: Public market data endpoints (no authentication required).
+  description: ''
 paths:
   /exchange/markets:
     get:
-      operationId: getMarkets
       tags:
       - Market Data
-      summary: List markets
-      description: List all tokens and trading pairs available on the exchange.
-      security: []
+      summary: Markets
+      description: Success Response. Returns the ticker information of a specific pair.
+      operationId: Ticker
+      parameters: []
       responses:
         '200':
-          description: Markets list.
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              example:
+                tokens:
+                - symbol: ETH
+                  name: Ethereum
+                  trade_enabled: true
+                  withdrawal_enabled: true
+                  deposit_enabled: true
+                  available_pairs:
+                  - ETH-AED
+                - symbol: USDT
+                  name: Tether
+                  trade_enabled: true
+                  withdrawal_enabled: true
+                  deposit_enabled: true
+                  available_pairs:
+                  - USDT-AED
+      deprecated: false
   /exchange/ticker/{pair}:
     get:
-      operationId: getTicker
       tags:
       - Market Data
-      summary: Get ticker
-      description: Current price and ticker for a trading pair (e.g. BTC-AED).
-      security: []
+      summary: Ticker
+      description: Success Response. Returns the ticker information of a specific pair.
+      operationId: getExchangeTickerByPair
       parameters:
-      - $ref: '#/components/parameters/Pair'
+      - name: pair
+        in: path
+        description: currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)
+        required: true
+        style: simple
+        schema:
+          type: string
       responses:
         '200':
-          description: Ticker for the pair.
-        '404':
-          $ref: '#/components/responses/NotFound'
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tickerresponse'
+              example:
+                ticker:
+                  pair: BTC-USD
+                  bid: '897.32'
+                  ask: '916.64'
+                  open_price: '659.49'
+                  last_price: '903.99'
+                  daily_low: '871'
+                  daily_high: '1025'
+                  daily_change: '10.58'
+                  daily_percentage_change: '1.38'
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Ticker
   /exchange/order-book/{pair}:
     get:
-      operationId: getOrderBook
       tags:
       - Market Data
-      summary: Get order book
-      description: Bids and asks for a trading pair.
-      security: []
+      summary: Order book
+      description: Success Response. Returns the orderbook of a specific pair. **Bids** are ordered by price in descendant order. **Asks** are ordered by price in ascendant order.
+      operationId: Orderbook
       parameters:
-      - $ref: '#/components/parameters/Pair'
+      - name: pair
+        in: path
+        description: currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)
+        required: true
+        style: simple
+        schema:
+          type: string
       - name: bids_limit
         in: query
-        required: false
+        style: form
+        explode: true
         schema:
           type: integer
       - name: asks_limit
         in: query
-        required: false
+        style: form
+        explode: true
         schema:
           type: integer
       responses:
         '200':
-          description: Order book for the pair.
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orderbookresponse'
+              example:
+                pair: BTC-AED
+                bids:
+                - price: '778.39'
+                  amount: '12.5944'
+                  count: 1
+                - price: '778.37'
+                  amount: '16'
+                  count: 1
+                asks:
+                - price: '778.4'
+                  amount: '4.1227151'
+                  count: 1
+                - price: '778.45'
+                  amount: '31.43544966'
+                  count: 1
+      deprecated: false
   /exchange/trades/{pair}:
     get:
-      operationId: getTrades
       tags:
       - Market Data
-      summary: Get recent trades
-      description: Recent public trade history for a trading pair.
-      security: []
+      summary: Trades
+      description: Success Response. Returns the overall trade history of a specific pair
+      operationId: Trades
       parameters:
-      - $ref: '#/components/parameters/Pair'
-      - $ref: '#/components/parameters/Limit'
-      - $ref: '#/components/parameters/FromDate'
+      - name: pair
+        in: path
+        description: Pair pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: limit
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: from_date
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
       responses:
         '200':
-          description: Recent trades for the pair.
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tradesresponse'
+              example:
+                pair: BTC-AED
+                trades:
+                - id: 215112
+                  type: buy
+                  price: '778.4'
+                  amount: '0.01'
+                  timestamp: 1481553232
+                - id: 215119
+                  type: sell
+                  price: '778.38'
+                  amount: '0.01'
+                  timestamp: 1481552778
+      deprecated: false
 components:
-  responses:
-    NotFound:
-      description: Resource not found.
-  parameters:
-    Pair:
-      name: pair
-      in: path
-      required: true
-      description: Trading pair, e.g. BTC-AED.
-      schema:
-        type: string
-        example: BTC-AED
-    FromDate:
-      name: from_date
-      in: query
-      required: false
-      description: ISO date to filter results from.
-      schema:
-        type: string
-        format: date
-    Limit:
-      name: limit
-      in: query
-      required: false
-      schema:
-        type: integer
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      description: 'API token generated at Settings > Security > Token Management, sent as an Authorization: Bearer <token> header. Tokens carry granular read permissions (Account Balance, deposit/withdrawal read access, Pro Order read access) and optional trade/withdrawal write permissions.'
+  schemas:
+    Tradesresponse:
+      title: Tradesresponse
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/type5'
+    Orderbookresponse:
+      title: Orderbookresponse
+      required:
+      - pair
+      - bids
+      - asks
+      type: object
+      properties:
+        pair:
+          type: string
+        bids:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bid'
+        asks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ask'
+      example:
+        pair: BTC-AED
+        bids:
+        - price: '778.39'
+          amount: '12.5944'
+          count: 1
+        - price: '778.37'
+          amount: '16'
+          count: 1
+        asks:
+        - price: '778.4'
+          amount: '4.1227151'
+          count: 1
+        - price: '778.45'
+          amount: '31.43544966'
+          count: 1
+    Bid:
+      title: Bid
+      required:
+      - price
+      - amount
+      - count
+      type: object
+      properties:
+        price:
+          type: string
+        amount:
+          type: string
+        count:
+          type: integer
+          format: int32
+      example:
+        price: '778.39'
+        amount: '12.5944'
+        count: 1
+    type5:
+      title: type5
+      enum:
+      - buy
+      - sell
+      type: string
+    Ask:
+      title: Ask
+      required:
+      - price
+      - amount
+      - count
+      type: object
+      properties:
+        price:
+          type: string
+        amount:
+          type: string
+        count:
+          type: integer
+          format: int32
+      example:
+        price: '778.4'
+        amount: '4.1227151'
+        count: 1
+    Ticker:
+      title: Ticker
+      required:
+      - pair
+      - bid
+      - ask
+      - open_price
+      - last_price
+      - daily_low
+      - daily_high
+      - daily_change
+      - daily_percentage_change
+      type: object
+      properties:
+        pair:
+          type: string
+        bid:
+          type: string
+        ask:
+          type: string
+        open_price:
+          type: string
+        last_price:
+          type: string
+        daily_low:
+          type: string
+        daily_high:
+          type: string
+        daily_change:
+          type: string
+        daily_percentage_change:
+          type: string
+      example:
+        pair: BTC-AED
+        bid: '897.32'
+        ask: '916.64'
+        open_price: '659.49'
+        last_price: '903.99'
+        daily_low: '871'
+        daily_high: '1025'
+        daily_change: '10.58'
+        daily_percentage_change: '1.38'
+    Tickerresponse:
+      title: Tickerresponse
+      required:
+      - ticker
+      type: object
+      properties:
+        ticker:
+          $ref: '#/components/schemas/Ticker'
+      example:
+        ticker:
+          pair: BTC-AED
+          bid: '897.32'
+          ask: '916.64'
+          open_price: '659.49'
+          last_price: '903.99'
+          daily_low: '871'
+          daily_high: '1025'
+          daily_change: '10.58'
+          daily_percentage_change: '1.38'

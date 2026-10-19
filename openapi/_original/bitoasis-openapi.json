@@ -1,0 +1,2590 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BitOasis Public API",
+    "description": "BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:\n\n+ A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).\n\n+ A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).\n\n+ A platform for trading in digital currencies (referred to as the “BitOasis Pro”).\n+ A platform that facilitates sending and receiving digital currencies.\n\n+ A platform that facilitates online and offline storage of clients’ digital assets.\n\n\nThe only services available for the public API are:\n\n+ Trading in digital currencies (referred to as the “BitOasis Pro”).\n\n+ Sending and receiving digital currencies.\n\n\nAnd we are planning to provide a public API for the rest of the services in the near future.\n",
+    "contact": {
+      "url": "https://bitoasis.net/support"
+    },
+    "x-logo": {
+      "url": "logo.svg",
+      "altText": "BitOasis"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.bitoasis.net/v1/",
+      "variables": {
+        "defaultHost": {
+          "default": "https://api.bitoasis.net"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/exchange/balances": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get Balances list",
+        "description": "Returns a list of accounts that have a balance.",
+        "operationId": "Balanceslist",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success Response. Returns a list of accounts that have a balance. Response formart will be currency as key and amount as value.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Returns currency as key and amount as value.",
+                  "example": {
+                    "balances": {
+                      "AED": "15.5",
+                      "BTC": "0.2756"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-deposits/{currency}": {
+      "get": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Coin deposit History",
+        "description": "Returns a list of digital currency deposits. The list is ordered by `data_created` in **descendant** order.",
+        "operationId": "CoindepositHistory",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "description": "crypto currency symbol - [supported values](#tag/Supported-Currencies)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "start index, used for pagination.",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "number of records - used for pagination",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "description": "get all orders starting from this date",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Returns an array of digital currency deposits",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoinDepositResponse"
+                },
+                "example": {
+                  "deposits": [
+                    {
+                      "id": 2,
+                      "amount": {
+                        "value": 100,
+                        "currency": "XMR"
+                      },
+                      "tx_hash": "088dd3e7b3f74385300fba3da2b8c8aa8ba640820b41d448501c1a01192c391c",
+                      "date_created": "2010-12-12T15:22:22+00:00",
+                      "status": "PENDING",
+                      "deposit_address": {
+                        "Address": "4BCeEPhodgPMbPWFN1dPwhWXdRX8q4mhhdZdA1dtSMLTLCEYvAj9QXjXAfF7CugEbmfBhgkqHbdgK9b2wKA6nqRZQCgvCDm",
+                        "Payment ID": "8faff639ed03900e6549a7ae664537ccbf04b442a60985e8300dcbd4e21f1fc4",
+                        "parsed_deposit_address": {
+                          "address": "4BCeEPhodgPMbPWFN1dPwhWXdRX8q4mhhdZdA1dtSMLTLCEYvAj9QXjXAfF7CugEbmfBhgkqHbdgK9b2wKA6nqRZQCgvCDm",
+                          "address_id": "8faff639ed03900e6549a7ae664537ccbf04b442a60985e8300dcbd4e21f1fc4"
+                        }
+                      }
+                    },
+                    {
+                      "id": 1,
+                      "amount": {
+                        "value": "0.22",
+                        "currency": "BTC"
+                      },
+                      "tx_hash": "9d714181c03a953aec1333a3a1c11c4766d7c2ec1166af5bf9cccd721ef09e18",
+                      "date_created": "2015-02-10T15:11:22+00:00",
+                      "status": "DONE",
+                      "deposit_address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD",
+                      "parsed_deposit_address": {
+                        "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-deposit/{id}": {
+      "get": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Coin deposit detail",
+        "description": "",
+        "operationId": "Coindepositdetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "deposit ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Returns digital currency deposit details.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coindepositdetailresponse"
+                },
+                "example": {
+                  "deposit": {
+                    "id": 3,
+                    "amount": {
+                      "value": "0.02",
+                      "currency": "BTC"
+                    },
+                    "tx_hash": "9654c06b2b94b73640095f1e73455767a42bbce3656b8c06968bbc7cfb9a1627",
+                    "date_created": "2015-02-12T15:22:22+00:00",
+                    "status": "PENDING",
+                    "deposit_address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD",
+                    "parsed_deposit_address": {
+                      "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-deposit": {
+      "post": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "New coin deposit",
+        "description": "Success response. Returns the digital currency deposit address.",
+        "operationId": "Newcoindeposit",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Newcoindepositrequest"
+              },
+              "example": {
+                "currency": "BTC",
+                "network": "bitcoin"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Newcoindepositresponse"
+                },
+                "example": {
+                  "currency": "BTC",
+                  "network": "bitcoin",
+                  "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD",
+                  "parsed_address": {
+                    "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/banks": {
+      "get": {
+        "tags": [
+          "Banks"
+        ],
+        "summary": "User banks list",
+        "description": "Success Response. Returns the list of banks that the user has submitted",
+        "operationId": "Bankslist",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "example": {
+                  "banks": [
+                      {
+                          "id": 6,
+                          "branch": "Abu Dhabi",
+                          "swift": null,
+                          "IBAN": "AE300355251611866997338",
+                          "account": null,
+                          "account_holder": "John Doe"
+                      }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-withdrawals/{currency}": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Coin withdrawal list",
+        "description": "Success Response. Returns the history of digital currency withdrawals for a specific digital currency.",
+        "operationId": "Coinwithdrawallist",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "description": "crypto currency symbol - [supported values](#tag/Supported-Currencies)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximal value is 1000",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coinwithdrawallistresponse"
+                },
+                "example": {
+                  "withdrawals": [
+                    {
+                      "id": 2,
+                      "amount": {
+                        "value": "1000",
+                        "currency": "XRP"
+                      },
+                      "amount_withdrawn": {
+                        "value": "999.98",
+                        "currency": "XRP"
+                      },
+                      "amount_fee": {
+                        "value": "0.02",
+                        "currency": "XRP"
+                      },
+                      "network": "bitcoin",
+                      "tx_hash": "B3A0933E67BF16DD3F5A470C20C26D71E2305EB26C69FD2F35F527EA6082916D",
+                      "date_created": "2018-01-12T15:22:22+00:00",
+                      "status": "PENDING",
+                      "withdrawal_address": {
+                        "Address": "rLW9gnQo7BQhU6igk5keqYnH3TVrCxGRzm",
+                        "Tag": "2781997917"
+                      },
+                      "parsed_withdrawal_address": {
+                        "address": "rLW9gnQo7BQhU6igk5keqYnH3TVrCxGRzm",
+                        "address_id": "2781997917"
+                      }
+                    },
+                    {
+                      "id": 1,
+                      "amount": {
+                        "value": "0.22",
+                        "currency": "BTC"
+                      },
+                      "amount_withdrawn": {
+                        "value": "0.219",
+                        "currency": "BTC"
+                      },
+                      "amount_fee": {
+                        "value": "0.001",
+                        "currency": "BTC"
+                      },
+                      "tx_hash": null,
+                      "date_created": "2015-02-10T15:11:22+00:00",
+                      "status": "DONE",
+                      "withdrawal_address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD",
+                      "parsed_withdrawal_address": {
+                        "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-withdrawal/{id}": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Coin withdrawal detail",
+        "description": "Success response. Returns the digital currency withdrawal details of a specific withdrawal.",
+        "operationId": "Coinwithdrawaldetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "withdrawal ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coinwithdrawaldetailresponse"
+                },
+                "example": {
+                  "withdrawal": {
+                    "id": 3,
+                    "amount": null,
+                    "value": "0.02",
+                    "currency": "BTC",
+                    "amount_withdrawn": {
+                      "value": "0.019",
+                      "currency": "BTC"
+                    },
+                    "amount_fee": {
+                      "value": "0.001",
+                      "currency": "BTC"
+                    },
+                    "tx_hash": "9654c06b2b94b73640095f1e73455767a42bbce3656b8c06968bbc7cfb9a1627",
+                    "date_created": "2015-02-12T15:22:22+00:00",
+                    "status": "DONE",
+                    "withdrawal_address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD",
+                    "parsed_withdrawal_address": {
+                      "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-withdrawal": {
+      "post": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "New coin withdrawal",
+        "description": "Success Response. Creates a digital currency withdrawal. Please note that we have added withdrawal confirmation via e-mail and SMS/TOTP as a basic layer of protectection.",
+        "operationId": "Newcoinwithdrawal",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Newcoinwithdrawalrequest"
+              },
+              "example": {
+                "currency": "BTC",
+                "network": "bitcoin",
+                "amount": "0.1",
+                "withdrawal_address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Newcoinwithdrawalresponse"
+                },
+                "example": {
+                  "withdrawal": {
+                    "id": 3,
+                    "amount": {
+                      "value": "0.1",
+                      "currency": "BTC"
+                    },
+                    "amount_withdrawn": {
+                      "value": "0.099",
+                      "currency": "BTC"
+                    },
+                    "amount_fee": {
+                      "value": "0.001",
+                      "currency": "BTC"
+                    },
+                    "network": "bitcoin",
+                    "tx_hash": null,
+                    "date_created": "2015-02-10T15:11:22+00:00",
+                    "status": "PROCESSING",
+                    "withdrawal_address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD",
+                    "parsed_withdrawal_address": {
+                      "address": "3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/fiat-deposits": {
+      "get": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Fiat deposit list",
+        "description": "Success Response. Returns the history of fiat deposits",
+        "operationId": "Fiatdepositlist",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximal value is 1000",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fiatdepositlistresponse"
+                },
+                "example": {
+                  "deposits": [
+                    {
+                      "id": 2,
+                      "code": "GH3NK1",
+                      "date_created": "2015-02-12T15:22:22+00:00",
+                      "status": "PENDING",
+                      "amount": {
+                        "value": "30.0",
+                        "currency": "AED"
+                      },
+                      "fee": {
+                        "value": "0.0",
+                        "currency": "AED"
+                      },
+                      "type": "DEPOSIT_BY_WIRE"
+                    },
+                    {
+                      "id": 1,
+                      "code": "AF6YPM",
+                      "date_created": "2015-02-10T15:11:22+00:00",
+                      "status": "DONE",
+                      "amount": {
+                        "value": "9.6",
+                        "currency": "AED"
+                      },
+                      "fee": {
+                        "value": "0.4",
+                        "currency": "AED"
+                      },
+                      "type": "DEPOSIT_BY_KNET"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/fiat-deposit/{id}": {
+      "get": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Fiat deposit detail",
+        "description": "Success response. Returns the details of a specific fiat deposit",
+        "operationId": "Fiatdepositdetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "deposit ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fiatdepositdetailresponse"
+                },
+                "example": {
+                  "deposit": {
+                    "id": 2,
+                    "code": "GH3NK1",
+                    "date_created": "2015-02-12T15:22:22+00:00",
+                    "status": "PENDING",
+                    "amount": {
+                      "value": "10.0",
+                      "currency": "AED"
+                    },
+                    "fee": {
+                      "value": "0.0",
+                      "currency": "AED"
+                    },
+                    "type": "DEPOSIT_BY_WIRE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/fiat-withdrawals": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Fiat withdrawal list",
+        "description": "Success Response. Returns the history of fiat withdrawals.",
+        "operationId": "Fiatwithdrawallist",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximal value is 1000",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fiatwithdrawallistresponse"
+                },
+                "example": {
+                  "withdrawals": [
+                    {
+                      "id": 2,
+                      "date_created": "2015-02-12T15:22:22+00:00",
+                      "status": "PENDING",
+                      "amount": {
+                        "value": "10.0",
+                        "currency": "AED"
+                      },
+                      "amount_withdrawn": {
+                        "value": "96.0",
+                        "currency": "AED"
+                      },
+                      "fee": {
+                        "value": "4.0",
+                        "currency": "AED"
+                      },
+                      "type": "WITHDRAWAL_BY_WIRE"
+                    },
+                    {
+                      "id": 1,
+                      "date_created": "2015-02-10T15:11:22+00:00",
+                      "status": "DONE",
+                      "amount": {
+                        "value": "100.0",
+                        "currency": "AED"
+                      },
+                      "amount_withdrawn": {
+                        "value": "96.0",
+                        "currency": "AED"
+                      },
+                      "fee": {
+                        "value": "4.0",
+                        "currency": "AED"
+                      },
+                      "type": "WITHDRAWAL_BY_WIRE"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/fiat-withdrawal": {
+        "post": {
+          "tags": ["Withdrawal"],
+          "summary": "Create a fiat withdrawal",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "amount": {
+                      "type": "object",
+                      "properties": {
+                        "value": { "type": "string" },
+                        "currency": { "type": "string" }
+                      }
+                    },
+                    "origin": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "status": "success",
+                    "id": "123"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+    "/exchange/fiat-withdrawal/{id}": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Fiat withdrawal detail",
+        "description": "Success response. Returns the fiat withdrawal details of a specific withdrawal.",
+        "operationId": "Fiatwithdrawaldetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "withdrawal ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fiatwithdrawaldetailresponse"
+                },
+                "example": {
+                  "withdrawal": {
+                    "id": 2,
+                    "date_created": "2015-02-12T15:22:22+00:00",
+                    "status": "PENDING",
+                    "amount": {
+                      "value": "10.0",
+                      "currency": "AED"
+                    },
+                    "amount_withdrawn": {
+                      "value": "96.0",
+                      "currency": "AED"
+                    },
+                    "fee": {
+                      "value": "4.0",
+                      "currency": "AED"
+                    },
+                    "type": "WITHDRAWAL_BY_WIRE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Cancel a Fiat withdrawal",
+        "description": "Success response. Cancels the fiat withdrawal",
+        "operationId": "Fiatwithdrawaldetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "withdrawal ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "withdrawal": {}
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/orders/{pair}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order list",
+        "description": "Success response. Returns the history of Pro exchange orders for a specific pair.",
+        "operationId": "Orderlist",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "description": "currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximal value is 1000",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "one of OPEN, DONE, CANCELED",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Orderlistresponse"
+                },
+                "example": {
+                  "orders": [
+                    {
+                      "id": 2,
+                      "pair": "BTC-AED",
+                      "side": "sell",
+                      "type": "market",
+                      "base_amount": "1.0",
+                      "price": null,
+                      "avg_execution_price": "1030.14",
+                      "fee": "0.0",
+                      "date_created": "2015-02-12T15:22:22+00:00",
+                      "status": "DONE"
+                    },
+                    {
+                      "id": 1,
+                      "pair": "BTC-AED",
+                      "side": "buy",
+                      "type": "limit",
+                      "base_amount": "1.0",
+                      "price": "1.23014",
+                      "avg_execution_price": null,
+                      "fee": "0.004",
+                      "date_created": "2015-02-10T15:11:22+00:00",
+                      "status": "OPEN"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/order/{id}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order detail",
+        "description": "Success Response. Returns the details of specific Pro exchange order.",
+        "operationId": "Orderdetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "order ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Orderdetailresponse"
+                },
+                "example": {
+                  "order": {
+                    "id": 2,
+                    "pair": "BTC-AED",
+                    "side": "sell",
+                    "type": "market",
+                    "base_amount": "1.0",
+                    "price": null,
+                    "avg_execution_price": "1030.14",
+                    "fee": "0.0",
+                    "date_created": "2015-02-12T15:22:22+00:00",
+                    "status": "DONE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/order": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "New or test order",
+        "description": "Success response. Creates a new pro exchange order",
+        "operationId": "Neworder",
+        "parameters": [
+          {
+            "name": "test",
+            "in": "path",
+            "description": "confirm this is a test",
+            "required": false,
+            "style": "simple",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Neworderrequest"
+              },
+              "example": {
+                "side": "buy",
+                "type": "limit",
+                "pair": "BTC-AED",
+                "amount": "10.0",
+                "price": "900.0"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Neworderresponse"
+                },
+                "example": {
+                  "order": {
+                    "id": 3,
+                    "pair": "BTC-AED",
+                    "side": "buy",
+                    "type": "limit",
+                    "base_amount": "10.0",
+                    "price": "900.0",
+                    "avg_execution_price": null,
+                    "fee": null,
+                    "date_created": "2017-02-10T15:11:22+00:00",
+                    "status": "OPEN"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/cancel-order": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Cancel order",
+        "description": "Success response. Cancels a Pro exchange order.",
+        "operationId": "Cancelorder",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cancelorderrequest"
+              },
+              "example": {
+                "id": 3
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Order cancelling might not be instant. Order could be still in OPEN status for a while before switch to CANCEL state (it can take few seconds to get cancel status).",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cancelorderresponse"
+                },
+                "example": {
+                  "is_canceled": true,
+                  "order": {
+                    "id": 3,
+                    "pair": "BTC-USD",
+                    "side": "buy",
+                    "type": "limit",
+                    "base_amount": "10.0",
+                    "price": "900.0",
+                    "avg_execution_price": null,
+                    "fee": null,
+                    "date_created": "2017-02-10T15:11:22+00:00",
+                    "status": "OPEN",
+                    "is_canceled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/markets": {
+      "get": {
+        "tags": [
+          "Market Data"
+        ],
+        "summary": "Markets",
+        "description": "Success Response. Returns the ticker information of a specific pair.",
+        "operationId": "Ticker",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "example": {
+                  "tokens": [
+                      {
+                          "symbol": "ETH",
+                          "name": "Ethereum",
+                          "trade_enabled": true,
+                          "withdrawal_enabled": true,
+                          "deposit_enabled": true,
+                          "available_pairs": [
+                              "ETH-AED"
+                          ]
+                      },
+                      {
+                          "symbol": "USDT",
+                          "name": "Tether",
+                          "trade_enabled": true,
+                          "withdrawal_enabled": true,
+                          "deposit_enabled": true,
+                          "available_pairs": [
+                              "USDT-AED"
+                          ]
+                      }
+                  ]
+              }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/ticker/{pair}": {
+      "get": {
+        "tags": [
+          "Market Data"
+        ],
+        "summary": "Ticker",
+        "description": "Success Response. Returns the ticker information of a specific pair.",
+        "operationId": "Ticker",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "description": "currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tickerresponse"
+                },
+                "example": {
+                  "ticker": {
+                    "pair": "BTC-USD",
+                    "bid": "897.32",
+                    "ask": "916.64",
+                    "open_price": "659.49",
+                    "last_price": "903.99",
+                    "daily_low": "871",
+                    "daily_high": "1025",
+                    "daily_change": "10.58",
+                    "daily_percentage_change": "1.38"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/order-book/{pair}": {
+      "get": {
+        "tags": [
+          "Market Data"
+        ],
+        "summary": "Order book",
+        "description": "Success Response. Returns the orderbook of a specific pair. **Bids** are ordered by price in descendant order. **Asks** are ordered by price in ascendant order.",
+        "operationId": "Orderbook",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "description": "currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bids_limit",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "asks_limit",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Orderbookresponse"
+                },
+                "example": {
+                  "pair": "BTC-AED",
+                  "bids": [
+                    {
+                      "price": "778.39",
+                      "amount": "12.5944",
+                      "count": 1
+                    },
+                    {
+                      "price": "778.37",
+                      "amount": "16",
+                      "count": 1
+                    }
+                  ],
+                  "asks": [
+                    {
+                      "price": "778.4",
+                      "amount": "4.1227151",
+                      "count": 1
+                    },
+                    {
+                      "price": "778.45",
+                      "amount": "31.43544966",
+                      "count": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/trades/{pair}": {
+      "get": {
+        "tags": [
+          "Market Data"
+        ],
+        "summary": "Trades",
+        "description": "Success Response. Returns the overall trade history of a specific pair",
+        "operationId": "Trades",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "description": "Pair pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tradesresponse"
+                },
+                "example": {
+                  "pair": "BTC-AED",
+                  "trades": [
+                    {
+                      "id": 215112,
+                      "type": "buy",
+                      "price": "778.4",
+                      "amount": "0.01",
+                      "timestamp": 1481553232
+                    },
+                    {
+                      "id": 215119,
+                      "type": "sell",
+                      "price": "778.38",
+                      "amount": "0.01",
+                      "timestamp": 1481552778
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/exchange/coin-withdrawal-fees": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Coin withdrawal fees",
+        "description": "Success response. Returns the withdrawal fees of all supported digital currency",
+        "operationId": "Coinwithdrawalfees",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coinwithdrawalfeesresponse"
+                },
+                "example": {
+                  "withdraw": {
+                    "BTC": "0.001",
+                    "ETH": "0.0027",
+                    "XRP": "0.02"
+                  },
+                  "withdraw_by_networks": {
+                    "BTC": {
+                      "network": {
+                        "code": "bitcoin",
+                        "name": "Bitcoin"
+                      },
+                      "fee": "0.0005"
+                    },
+                    "ETH": {
+                      "network": {
+                        "code": "erc20",
+                        "name": "Ethereum"
+                      },
+                      "fee": "0.00128205"
+                    },
+                    "XRP": {
+                      "network": {
+                        "code": "ripple",
+                        "name": "Ripple"
+                      },
+                      "fee": "0.215"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/error-400": {
+      "get": {
+        "tags": [
+          "Error responses"
+        ],
+        "summary": "400 Invalid or required parameter",
+        "description": "",
+        "operationId": "400Invalidorrequiredparameter",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          },
+          "400": {
+            "description": "Unexpected error in API call. See HTTP response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/503Applicationexception503response"
+                },
+                "example": {
+                  "code": 400,
+                  "status": "error",
+                  "message": "currency_pair is required!"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/error-401": {
+      "get": {
+        "tags": [
+          "Error responses"
+        ],
+        "summary": "401 Unauthorized request",
+        "description": "",
+        "operationId": "401Unauthorizedrequest",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unexpected error in API call. See HTTP response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/503Applicationexception503response"
+                },
+                "example": {
+                  "code": 401,
+                  "status": "error",
+                  "message": "The resource owner or authorization server denied the request."
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/error-403": {
+      "get": {
+        "tags": [
+          "Error responses"
+        ],
+        "summary": "403 Forbidden request",
+        "description": "",
+        "operationId": "403Forbiddenrequest",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          },
+          "403": {
+            "description": "Unexpected error in API call. See HTTP response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/503Applicationexception503response"
+                },
+                "example": {
+                  "code": 403,
+                  "status": "error",
+                  "message": "Your token is not allowed to do this action!"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/error-404": {
+      "get": {
+        "tags": [
+          "Error responses"
+        ],
+        "summary": "404 Content not found",
+        "description": "Also known as Bad request.",
+        "operationId": "404Contentnotfound",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          },
+          "404": {
+            "description": "Unexpected error in API call. See HTTP response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/503Applicationexception503response"
+                },
+                "example": {
+                  "code": 404,
+                  "status": "error",
+                  "message": "Deposit not found."
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/error-503": {
+      "get": {
+        "tags": [
+          "Error responses"
+        ],
+        "summary": "503 Application exception",
+        "description": "Mostly occured when third party service is down.",
+        "operationId": "503Applicationexception",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          },
+          "503": {
+            "description": "Unexpected error in API call. See HTTP response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/503Applicationexception503response"
+                },
+                "example": {
+                  "code": 503,
+                  "status": "error",
+                  "message": "Service is temporarily unavailable, please try again later."
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CoinAmount": {
+        "title": "Digital currency amount",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string",
+            "title": "Value"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          }
+        }
+      },
+      "CoinDepositResponse": {
+        "title": "Coin Deposit Response",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Order identifier"
+          },
+          "amount": {
+            "allOf": [
+              {
+                "type": "object",
+                "title": "Deposited amount"
+              },
+              {
+                "$ref": "#/components/schemas/CoinAmount"
+              }
+            ]
+          },
+          "tx_hash": {
+            "type": "string",
+            "title": "Transaction hash",
+            "description": "could be null when deposit is created between 2 different exchange wallets",
+            "nullable": true
+          },
+          "date_created": {
+            "type": "string",
+            "format": "date",
+            "title": "Deposit order creation date"
+          },
+          "status": {
+            "allOf": [
+              {
+                "type": "string",
+                "title": "Deposit order status"
+              },
+              {
+                "$ref": "#/components/schemas/CoinDepositStatus"
+              }
+            ]
+          },
+          "deposit_address": {
+            "type": "string",
+            "title": "Deposit address",
+            "description": "could be null only in some negligible cases (system does not have the address, very old deposits)",
+            "nullable": true
+          },
+          "parsed_deposit_address": {
+            "allOf": [
+              {
+                "type": "object",
+                "title": "Parsed deposit address"
+              },
+              {
+                "$ref": "#/components/schemas/CoinDepositAddress"
+              }
+            ]
+          }
+        }
+      },
+      "CoinDepositStatus": {
+        "title": "Coin Deposit Status",
+        "enum": [
+          "UNCONFIRMED",
+          "PENDING",
+          "DONE",
+          "CANCELED"
+        ],
+        "type": "string"
+      },
+      "CoinDepositAddress": {
+        "title": "Parsed Coin Deposit Address",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Digital currency address",
+            "nullable": false
+          },
+          "address_id": {
+            "type": "string",
+            "description": "Digital currency address ID (Tag, Memo). Available only for cryprotcurrencies which support additional address identifiers (XRP, XLM)",
+            "nullable": true
+          }
+        }
+      },
+      "Coindepositdetailresponse": {
+        "title": "Coindepositdetailresponse",
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "could be null when deposit is created between 2 different exchange wallets",
+            "nullable": true,
+            "example": null
+          },
+          "status": {
+            "$ref": "#/components/schemas/CoinDepositStatus"
+          },
+          "deposit_address": {
+            "type": "string",
+            "description": "could be null only in some negligible cases (system doesn't have the address, very old deposits)",
+            "nullable": true
+          },
+          "parsed_deposit_address": {
+            "$ref": "#/components/schemas/CoinDepositAddress"
+          }
+        }
+      },
+      "Newcoindepositrequest": {
+        "title": "Newcoindepositrequest",
+        "required": [
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "crypto currency symbol - [supported values](#tag/Supported-Currencies)"
+          },
+          "network": {
+            "type": "string",
+            "description": "Cryptocurrency network code. If not passed, default network will be selected. - [supported values](#tag/Supported-Networks)"
+          }
+        }
+      },
+      "Newcoindepositresponse": {
+        "title": "Newcoindepositresponse",
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "network": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "parsed_address": {
+            "$ref": "#/components/schemas/parsed_address"
+          }
+        }
+      },
+      "parsed_address": {
+        "title": "parsed_address",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "address_id": {
+            "type": "string",
+            "description": "available only for cryprotcurrencies which support additional address identifiers (XRP, XLM)",
+            "nullable": true
+          }
+        },
+        "description": "in case of additional information included in address (e.g. XRP tag or XLM Memo) this item provides parsed address"
+      },
+      "Coinwithdrawallistresponse": {
+        "title": "Coinwithdrawallistresponse",
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "could be null when external withdrawal is created",
+            "nullable": true,
+            "example": null
+          },
+          "status": {
+            "$ref": "#/components/schemas/status4"
+          },
+          "withdrawal_address": {
+            "type": "string",
+            "description": "could be null only in some negligible cases (system doesn't have the address, very old withdrawals)",
+            "nullable": true
+          },
+          "parsed_withdrawal_address": {
+            "$ref": "#/components/schemas/parsed_withdrawal_address"
+          }
+        }
+      },
+      "status4": {
+        "title": "status4",
+        "enum": [
+          "PROCESSING",
+          "PENDING",
+          "DONE",
+          "CANCELED"
+        ],
+        "type": "string"
+      },
+      "parsed_withdrawal_address": {
+        "title": "parsed_withdrawal_address",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "address_id": {
+            "type": "string",
+            "description": "available only for cryprotcurrencies which support additional address identifiers (XRP, XLM)",
+            "nullable": true
+          }
+        },
+        "description": "in case additional information is included in the address (e.g. XRP tag or XLM memo), this item provides parsed withdrawal_address"
+      },
+      "Coinwithdrawaldetailresponse": {
+        "title": "Coinwithdrawaldetailresponse",
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "could be null when external withdrawal is created",
+            "nullable": true,
+            "example": null
+          },
+          "status": {
+            "$ref": "#/components/schemas/status4"
+          },
+          "withdrawal_address": {
+            "type": "string",
+            "description": "could be null only in some negligible cases (system doesn't have the address, very old withdrawals)",
+            "nullable": true
+          },
+          "parsed_withdrawal_address": {
+            "$ref": "#/components/schemas/parsed_withdrawal_address"
+          }
+        }
+      },
+      "Newcoinwithdrawalrequest": {
+        "title": "Newcoinwithdrawalrequest",
+        "required": [
+          "currency",
+          "amount",
+          "withdrawal_address"
+        ],
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "Cryptocurrency symbol - [supported values](#tag/Supported-Currencies)"
+          },
+          "amount": {
+            "type": "number",
+            "description": "format it as string (for compatibility of currencies with long decimal part, e.g. ETH)"
+          },
+          "withdrawal_address": {
+            "type": "string"
+          },
+          "withdrawal_address_id": {
+            "type": "string",
+            "description": "additional address identifier (e.g. XRP tag or XLM memo)"
+          },
+          "network": {
+            "type": "string",
+            "description": "Cryptocurrency network code. If not passed, default network will be selected. - [supported values](#tag/Supported-Networks)"
+          }
+        }
+      },
+      "Newcoinwithdrawalresponse": {
+        "title": "Newcoinwithdrawalresponse",
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "could be null when external withdrawal is created",
+            "nullable": true,
+            "example": null
+          },
+          "status": {
+            "$ref": "#/components/schemas/status4"
+          },
+          "withdrawal_address": {
+            "type": "string"
+          },
+          "parsed_withdrawal_address": {
+            "$ref": "#/components/schemas/parsed_withdrawal_address"
+          }
+        }
+      },
+      "Fiatdepositlistresponse": {
+        "title": "Fiatdepositlistresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status7"
+          },
+          "type": {
+            "$ref": "#/components/schemas/type"
+          }
+        }
+      },
+      "status7": {
+        "title": "status7",
+        "enum": [
+          "UNCONFIRMED",
+          "PENDING",
+          "DONE",
+          "CANCELED",
+          "PROCESSING"
+        ],
+        "type": "string"
+      },
+      "type": {
+        "title": "type",
+        "enum": [
+          "DEPOSIT_BY_WIRE",
+          "DEPOSIT_BY_KNET",
+          "CASH_DEPOSIT"
+        ],
+        "type": "string"
+      },
+      "Fiatdepositdetailresponse": {
+        "title": "Fiatdepositdetailresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status7"
+          },
+          "type": {
+            "$ref": "#/components/schemas/type"
+          }
+        }
+      },
+      "Fiatwithdrawallistresponse": {
+        "title": "Fiatwithdrawallistresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status9"
+          },
+          "type": {
+            "$ref": "#/components/schemas/type2"
+          }
+        }
+      },
+      "status9": {
+        "title": "status9",
+        "enum": [
+          "UNCONFIRMED",
+          "PENDING",
+          "DONE",
+          "CANCELED"
+        ],
+        "type": "string"
+      },
+      "type2": {
+        "title": "type2",
+        "enum": [
+          "WITHDRAWAL_BY_WIRE"
+        ],
+        "type": "string"
+      },
+      "Fiatwithdrawaldetailresponse": {
+        "title": "Fiatwithdrawaldetailresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status9"
+          },
+          "type": {
+            "$ref": "#/components/schemas/type2"
+          }
+        }
+      },
+      "Orderlistresponse": {
+        "title": "Orderlistresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status11"
+          },
+          "price": {
+            "type": "number",
+            "description": "null for market order, limit price for limit order",
+            "nullable": true
+          },
+          "avg_execution_price": {
+            "type": "number",
+            "description": "null when in OPEN status (or CANCELED before execution), number in string format otherwise",
+            "nullable": true
+          },
+          "fee": {
+            "type": "number",
+            "description": "decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)"
+          }
+        }
+      },
+      "status11": {
+        "title": "status11",
+        "enum": [
+          "OPEN",
+          "DONE",
+          "CANCELED",
+          "UNCONFIRMED"
+        ],
+        "type": "string",
+        "description": "Order can get to UNCONFIRMED status only in rare cases. It will get resolved to OPEN or CANCELED after a short period of time."
+      },
+      "Orderdetailresponse": {
+        "title": "Orderdetailresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status11"
+          },
+          "price": {
+            "type": "string",
+            "description": "null for market order, limit price for limit order",
+            "nullable": true
+          },
+          "avg_execution_price": {
+            "type": "number",
+            "description": "null when in OPEN status, number in string format otherwise",
+            "nullable": true
+          },
+          "fee": {
+            "type": "number",
+            "description": "decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)"
+          }
+        }
+      },
+      "Neworderrequest": {
+        "title": "Neworderrequest",
+        "required": [
+          "side",
+          "type",
+          "pair",
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "side": {
+            "$ref": "#/components/schemas/side"
+          },
+          "type": {
+            "$ref": "#/components/schemas/type4"
+          },
+          "pair": {
+            "type": "string",
+            "description": "currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)"
+          },
+          "amount": {
+            "type": "number",
+            "description": "format it as string (for compatibility of currencies with long decimal part, e.g. ETH)"
+          },
+          "price": {
+            "type": "number",
+            "description": "limit price, required within limit type"
+          },
+          "stop_price": {
+            "type": "number",
+            "description": "stop price, required within stop and stop limit type"
+          }
+        }
+      },
+      "side": {
+        "title": "side",
+        "enum": [
+          "buy",
+          "sell"
+        ],
+        "type": "string"
+      },
+      "type4": {
+        "title": "type4",
+        "enum": [
+          "limit",
+          "market",
+          "stop",
+          "stop_limit"
+        ],
+        "type": "string"
+      },
+      "Neworderresponse": {
+        "title": "Neworderresponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/status11"
+          },
+          "price": {
+            "type": "number",
+            "description": "null for market order, limit price for limit order",
+            "nullable": true
+          },
+          "avg_execution_price": {
+            "type": "number",
+            "description": "null when in OPEN status, number in string format otherwise",
+            "nullable": true
+          },
+          "fee": {
+            "type": "number",
+            "description": "decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)"
+          },
+          "stop_price": {
+            "type": "number",
+            "description": "available only for stop and stop limit type"
+          },
+          "date_stop_price_triggered": {
+            "type": "string",
+            "description": "available only for stop and stop limit type, null if stop price hasn't been triggered yet",
+            "nullable": true
+          }
+        }
+      },
+      "Cancelorderrequest": {
+        "title": "Cancelorderrequest",
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          }
+        }
+      },
+      "Cancelorderresponse": {
+        "title": "Cancelorderresponse",
+        "type": "object",
+        "properties": {
+          "is_canceled": {
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "#/components/schemas/status11"
+          },
+          "price": {
+            "type": "number",
+            "description": "null for market order, limit price for limit order",
+            "nullable": true
+          },
+          "avg_execution_price": {
+            "type": "number",
+            "description": "null when in OPEN status, number in string format otherwise",
+            "nullable": true
+          },
+          "fee": {
+            "type": "number",
+            "description": "decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)"
+          }
+        }
+      },
+      "Tickerresponse": {
+        "title": "Tickerresponse",
+        "required": [
+          "ticker"
+        ],
+        "type": "object",
+        "properties": {
+          "ticker": {
+            "$ref": "#/components/schemas/Ticker"
+          }
+        },
+        "example": {
+          "ticker": {
+            "pair": "BTC-AED",
+            "bid": "897.32",
+            "ask": "916.64",
+            "open_price": "659.49",
+            "last_price": "903.99",
+            "daily_low": "871",
+            "daily_high": "1025",
+            "daily_change": "10.58",
+            "daily_percentage_change": "1.38"
+          }
+        }
+      },
+      "Ticker": {
+        "title": "Ticker",
+        "required": [
+          "pair",
+          "bid",
+          "ask",
+          "open_price",
+          "last_price",
+          "daily_low",
+          "daily_high",
+          "daily_change",
+          "daily_percentage_change"
+        ],
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "bid": {
+            "type": "string"
+          },
+          "ask": {
+            "type": "string"
+          },
+          "open_price": {
+            "type": "string"
+          },
+          "last_price": {
+            "type": "string"
+          },
+          "daily_low": {
+            "type": "string"
+          },
+          "daily_high": {
+            "type": "string"
+          },
+          "daily_change": {
+            "type": "string"
+          },
+          "daily_percentage_change": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "pair": "BTC-AED",
+          "bid": "897.32",
+          "ask": "916.64",
+          "open_price": "659.49",
+          "last_price": "903.99",
+          "daily_low": "871",
+          "daily_high": "1025",
+          "daily_change": "10.58",
+          "daily_percentage_change": "1.38"
+        }
+      },
+      "Orderbookresponse": {
+        "title": "Orderbookresponse",
+        "required": [
+          "pair",
+          "bids",
+          "asks"
+        ],
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "bids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bid"
+            }
+          },
+          "asks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ask"
+            }
+          }
+        },
+        "example": {
+          "pair": "BTC-AED",
+          "bids": [
+            {
+              "price": "778.39",
+              "amount": "12.5944",
+              "count": 1
+            },
+            {
+              "price": "778.37",
+              "amount": "16",
+              "count": 1
+            }
+          ],
+          "asks": [
+            {
+              "price": "778.4",
+              "amount": "4.1227151",
+              "count": 1
+            },
+            {
+              "price": "778.45",
+              "amount": "31.43544966",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "Bid": {
+        "title": "Bid",
+        "required": [
+          "price",
+          "amount",
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "price": "778.39",
+          "amount": "12.5944",
+          "count": 1
+        }
+      },
+      "Ask": {
+        "title": "Ask",
+        "required": [
+          "price",
+          "amount",
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "price": "778.4",
+          "amount": "4.1227151",
+          "count": 1
+        }
+      },
+      "Tradesresponse": {
+        "title": "Tradesresponse",
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/type5"
+          }
+        }
+      },
+      "type5": {
+        "title": "type5",
+        "enum": [
+          "buy",
+          "sell"
+        ],
+        "type": "string"
+      },
+      "Coinwithdrawalfeesresponse": {
+        "title": "Coinwithdrawalfeesresponse",
+        "required": [
+          "withdraw",
+          "withdraw_by_networks"
+        ],
+        "type": "object",
+        "properties": {
+          "withdraw": {
+            "$ref": "#/components/schemas/Withdraw"
+          },
+          "withdraw_by_networks": {
+            "$ref": "#/components/schemas/WithdrawByNetworks"
+          }
+        },
+        "example": {
+          "withdraw": {
+            "BTC": "0.001",
+            "ETH": "0.0027",
+            "XRP": "0.02"
+          }
+        }
+      },
+      "Withdraw": {
+        "title": "Withdraw",
+        "required": [
+          "BTC",
+          "ETH",
+          "XRP"
+        ],
+        "type": "object",
+        "properties": {
+          "BTC": {
+            "type": "string"
+          },
+          "ETH": {
+            "type": "string"
+          },
+          "XRP": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "BTC": "0.001",
+          "ETH": "0.0027",
+          "XRP": "0.02"
+        }
+      },
+      "WithdrawByNetworks": {
+        "title": "Withdraw Fees by network",
+        "required": [
+          "BTC",
+          "ETH",
+          "XRP"
+        ],
+        "type": "object",
+        "properties": {
+          "BTC": {
+            "type": "object"
+          },
+          "ETH": {
+            "type": "object"
+          },
+          "XRP": {
+            "type": "object"
+          }
+        },
+        "example": {
+          "BTC": {
+            "network": {
+              "code": "bitcoin",
+              "name": "Bitcoin"
+            },
+            "fee": "0.0005"
+          },
+          "ETH": {
+            "network": {
+              "code": "erc20",
+              "name": "Ethereum"
+            },
+            "fee": "0.0015"
+          },
+          "XRP": {
+            "network": {
+              "code": "ripple",
+              "name": "Ripple"
+            },
+            "fee": "0.2"
+          }
+        }
+      },
+      "503Applicationexception503response": {
+        "title": "503Applicationexception503response",
+        "required": [
+          "code",
+          "status",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": 503,
+          "status": "error",
+          "message": "Service is temporarily unavailable, please try again later."
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Base URL",
+      "description": "**The base URL of the API**: `https://api.bitoasis.net/v1/`\n\nThe **V1** in URL is API version identifier. Right now we have only API version one.\n\nPlease follow the convention and use URIs without last trailing slash.\n\nThese are correct URIs\n  + resource/11  `correct`\n  + resource  `correct`\n\nWhile the following examples are incorrect\n  + resource/11/  `incorrect`\n  + resource/  `incorrect`"
+    },
+    {
+      "name": "Authentication",
+      "description": "To be able to access the API, you have to be a verified BitOasis user, you can verify your account from [here](https://bitoasis.net/en/verification).\n\nTo be able to utilize the BitOasis Public API, an access token must be generated by following the steps below:\n  + Sign up to BitOasis and make sure to verify your account for Tier 1 as a minimum requirement or login to your existing verified account\n  + Proceed to Settings > [API Token Management page](https://bitoasis.net/en/settings/tokens)\n  + Click on the `+ Add Token` button\n  + Enter a Name for the token (for your reference only)\n  + Enter the IP address(es) you wish to allow to access your account (Can be blank to allow any IP address)\n  + Determine the permissions you want to allow for the generated token by checking the boxes\n  + Click on `Create Token`\n  + After OTP verification the generated API token will appear for you. Please make sure to copy the token as is will not show after you click on `Confirm`\n\nThe token must be added to the request header with the parameter name `Authorization`. See below example:\n\n`Authorization: Bearer {YOUR_API_TOKEN}`\n"
+    },
+    {
+      "name": "Supported Currencies",
+      "description": "### Fiat Currencies\n\n  + United Arab Emirates Dirham (AED)\n\n### Digital Currencies\n\n  + Bitcoin (BTC)\n  + Ether (ETH)\n  + Ripple (XRP)\n  + Bitcoin Cash (BCH)\n  + Litecoin (LTC)\n  + Ethereum Classic (ETC)\n  + EOS (EOS)\n  + Stellar Lumen (XLM)\n  + Algorand (ALGO)\n  + Basic Attention Token (BAT)\n  + Omisego (OMG)\n  + 0x (ZRX)\n  + NEO (NEO)\n  + Tezos (XTZ)\n  + Tether (USDT)\n"
+    },
+    {
+      "name": "Supported Pairs",
+      "description": "### Fiat - Digital Currency Pairs\n\n  + BTC-AED\n  + ETH-AED\n  + BCH-AED\n  + XRP-AED\n  + ETC-AED\n  + LTC-AED\n  + XLM-AED\n  + EOS-AED\n  + OMG-AED\n  + ZRX-AED\n  + BAT-AED\n  + ALGO-AED\n  + USDT-AED\n  + NEO-AED\n  + XTZ-AED\n\n### Digital Currency Pairs\n\n  + ETH-BTC\n  + BCH-BTC\n  + XRP-BTC\n  + ETC-BTC\n  + LTC-BTC\n  + EOS-BTC\n  + OMG-BTC\n  + ZRX-BTC\n  + BAT-BTC\n  + ALGO-BTC\n  + NEO-BTC\n  + XTZ-BTC\n  + EOS-ETH\n  + BTC-USDT\n  + ETH-USDT\n"
+    },
+    {
+      "name": "Supported Networks",
+      "description": "+ bitcoin (BTC)\n + bitcoin_cash (BCH)\n + erc20 (ETH, erc20 tokens)\n + ethereum_classic (ETC)\n + ethereum_pow (ETHW)\n + trc20 (TRON)\n + matic (MATIC)\n + ripple (XRP)\n + litecoin (LTC)\n + stellar_lumen (XLM)\n + eos (EOS)\n + algorand (ALGO)\n + neo (NEO)\n + tezos (XTZ)\n + dogecoin (DOGE)\n + waves (WAVES)\n + polkadot (DOT)\n + solana (SOL)\n + cardano (ADA)\n + fantom (FTM)\n + terra2 (LUNA2)\n + cosmos (ATOM)\n + near (NEAR)\n + digibyte (DGB)\n + elrond_egold (EGLD)\n + filecoin (FIL)\n + iota (IOTA)\n + kusama (KSM)\n + qtum (QTUM)\n + theta (THETA)\n + ve_chain (VET)\n + verge (XVG)"
+    },
+    {
+      "name": "Accounts",
+      "description": ""
+    },
+    {
+      "name": "Deposit",
+      "description": ""
+    },
+    {
+      "name": "Banks",
+      "description": ""
+    },
+    {
+      "name": "Withdrawal",
+      "description": ""
+    },
+    {
+      "name": "Order",
+      "description": ""
+    },
+    {
+      "name": "Market Data",
+      "description": ""
+    },
+    {
+      "name": "Error responses",
+      "description": "All API calls can generate those error responses bellow."
+    }
+  ]
+}

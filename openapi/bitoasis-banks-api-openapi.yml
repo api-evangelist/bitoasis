@@ -1,0 +1,68 @@
+openapi: 3.2.0
+info:
+  title: BitOasis Public Banks API
+  description: 'BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:
+
+
+    + A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).
+
+
+    + A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).
+
+
+    + A platform for trading in digital currencies (referred to as the “BitOasis Pro”).
+
+    + A platform that facilitates sending and receiving digital currencies.
+
+
+    + A platform that facilitates online and offline storage of clients’ digital assets.
+
+
+    The only services available for the public API are:
+
+
+    + Trading in digital currencies (referred to as the “BitOasis Pro”).
+
+
+    + Sending and receiving digital currencies.
+
+
+    And we are planning to provide a public API for the rest of the services in the near future.'
+  contact:
+    url: https://bitoasis.net/support
+  x-logo:
+    url: logo.svg
+    altText: BitOasis
+  version: '1.0'
+servers:
+- url: https://api.bitoasis.net/v1/
+  variables:
+    defaultHost:
+      default: https://api.bitoasis.net
+tags:
+- name: Banks
+  description: ''
+paths:
+  /exchange/banks:
+    get:
+      tags:
+      - Banks
+      summary: User banks list
+      description: Success Response. Returns the list of banks that the user has submitted
+      operationId: Bankslist
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              example:
+                banks:
+                - id: 6
+                  branch: Abu Dhabi
+                  swift: null
+                  IBAN: AE300355251611866997338
+                  account: null
+                  account_holder: John Doe
+      deprecated: false

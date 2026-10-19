@@ -1,0 +1,608 @@
+openapi: 3.2.0
+info:
+  title: BitOasis Public Withdrawal API
+  description: 'BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:
+
+
+    + A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).
+
+
+    + A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).
+
+
+    + A platform for trading in digital currencies (referred to as the “BitOasis Pro”).
+
+    + A platform that facilitates sending and receiving digital currencies.
+
+
+    + A platform that facilitates online and offline storage of clients’ digital assets.
+
+
+    The only services available for the public API are:
+
+
+    + Trading in digital currencies (referred to as the “BitOasis Pro”).
+
+
+    + Sending and receiving digital currencies.
+
+
+    And we are planning to provide a public API for the rest of the services in the near future.'
+  contact:
+    url: https://bitoasis.net/support
+  x-logo:
+    url: logo.svg
+    altText: BitOasis
+  version: '1.0'
+servers:
+- url: https://api.bitoasis.net/v1/
+  variables:
+    defaultHost:
+      default: https://api.bitoasis.net
+tags:
+- name: Withdrawal
+  description: ''
+paths:
+  /exchange/coin-withdrawals/{currency}:
+    get:
+      tags:
+      - Withdrawal
+      summary: Coin withdrawal list
+      description: Success Response. Returns the history of digital currency withdrawals for a specific digital currency.
+      operationId: Coinwithdrawallist
+      parameters:
+      - name: currency
+        in: path
+        description: crypto currency symbol - [supported values](#tag/Supported-Currencies)
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: offset
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: maximal value is 1000
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: from_date
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coinwithdrawallistresponse'
+              example:
+                withdrawals:
+                - id: 2
+                  amount:
+                    value: '1000'
+                    currency: XRP
+                  amount_withdrawn:
+                    value: '999.98'
+                    currency: XRP
+                  amount_fee:
+                    value: '0.02'
+                    currency: XRP
+                  network: bitcoin
+                  tx_hash: B3A0933E67BF16DD3F5A470C20C26D71E2305EB26C69FD2F35F527EA6082916D
+                  date_created: '2018-01-12T15:22:22+00:00'
+                  status: PENDING
+                  withdrawal_address:
+                    Address: rLW9gnQo7BQhU6igk5keqYnH3TVrCxGRzm
+                    Tag: '2781997917'
+                  parsed_withdrawal_address:
+                    address: rLW9gnQo7BQhU6igk5keqYnH3TVrCxGRzm
+                    address_id: '2781997917'
+                - id: 1
+                  amount:
+                    value: '0.22'
+                    currency: BTC
+                  amount_withdrawn:
+                    value: '0.219'
+                    currency: BTC
+                  amount_fee:
+                    value: '0.001'
+                    currency: BTC
+                  tx_hash: null
+                  date_created: '2015-02-10T15:11:22+00:00'
+                  status: DONE
+                  withdrawal_address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+                  parsed_withdrawal_address:
+                    address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+      deprecated: false
+  /exchange/coin-withdrawal/{id}:
+    get:
+      tags:
+      - Withdrawal
+      summary: Coin withdrawal detail
+      description: Success response. Returns the digital currency withdrawal details of a specific withdrawal.
+      operationId: Coinwithdrawaldetail
+      parameters:
+      - name: id
+        in: path
+        description: withdrawal ID
+        required: true
+        style: simple
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coinwithdrawaldetailresponse'
+              example:
+                withdrawal:
+                  id: 3
+                  amount: null
+                  value: '0.02'
+                  currency: BTC
+                  amount_withdrawn:
+                    value: '0.019'
+                    currency: BTC
+                  amount_fee:
+                    value: '0.001'
+                    currency: BTC
+                  tx_hash: 9654c06b2b94b73640095f1e73455767a42bbce3656b8c06968bbc7cfb9a1627
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: DONE
+                  withdrawal_address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+                  parsed_withdrawal_address:
+                    address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+      deprecated: false
+  /exchange/coin-withdrawal:
+    post:
+      tags:
+      - Withdrawal
+      summary: New coin withdrawal
+      description: Success Response. Creates a digital currency withdrawal. Please note that we have added withdrawal confirmation via e-mail and SMS/TOTP as a basic layer of protectection.
+      operationId: Newcoinwithdrawal
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Newcoinwithdrawalrequest'
+            example:
+              currency: BTC
+              network: bitcoin
+              amount: '0.1'
+              withdrawal_address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+        required: true
+      responses:
+        '201':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Newcoinwithdrawalresponse'
+              example:
+                withdrawal:
+                  id: 3
+                  amount:
+                    value: '0.1'
+                    currency: BTC
+                  amount_withdrawn:
+                    value: '0.099'
+                    currency: BTC
+                  amount_fee:
+                    value: '0.001'
+                    currency: BTC
+                  network: bitcoin
+                  tx_hash: null
+                  date_created: '2015-02-10T15:11:22+00:00'
+                  status: PROCESSING
+                  withdrawal_address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+                  parsed_withdrawal_address:
+                    address: 3Asaqyq7g1kLnT7nrpmWh1wPWyvRD7b5eD
+      deprecated: false
+  /exchange/fiat-withdrawals:
+    get:
+      tags:
+      - Withdrawal
+      summary: Fiat withdrawal list
+      description: Success Response. Returns the history of fiat withdrawals.
+      operationId: Fiatwithdrawallist
+      parameters:
+      - name: offset
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: maximal value is 1000
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: from_date
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fiatwithdrawallistresponse'
+              example:
+                withdrawals:
+                - id: 2
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: PENDING
+                  amount:
+                    value: '10.0'
+                    currency: AED
+                  amount_withdrawn:
+                    value: '96.0'
+                    currency: AED
+                  fee:
+                    value: '4.0'
+                    currency: AED
+                  type: WITHDRAWAL_BY_WIRE
+                - id: 1
+                  date_created: '2015-02-10T15:11:22+00:00'
+                  status: DONE
+                  amount:
+                    value: '100.0'
+                    currency: AED
+                  amount_withdrawn:
+                    value: '96.0'
+                    currency: AED
+                  fee:
+                    value: '4.0'
+                    currency: AED
+                  type: WITHDRAWAL_BY_WIRE
+      deprecated: false
+  /exchange/fiat-withdrawal:
+    post:
+      tags:
+      - Withdrawal
+      summary: Create a fiat withdrawal
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    currency:
+                      type: string
+                origin:
+                  type: string
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: success
+                id: '123'
+      operationId: postExchangeFiatWithdrawal
+      x-operation-id-source: derived
+  /exchange/fiat-withdrawal/{id}:
+    get:
+      tags:
+      - Withdrawal
+      summary: Fiat withdrawal detail
+      description: Success response. Returns the fiat withdrawal details of a specific withdrawal.
+      operationId: Fiatwithdrawaldetail
+      parameters:
+      - name: id
+        in: path
+        description: withdrawal ID
+        required: true
+        style: simple
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fiatwithdrawaldetailresponse'
+              example:
+                withdrawal:
+                  id: 2
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: PENDING
+                  amount:
+                    value: '10.0'
+                    currency: AED
+                  amount_withdrawn:
+                    value: '96.0'
+                    currency: AED
+                  fee:
+                    value: '4.0'
+                    currency: AED
+                  type: WITHDRAWAL_BY_WIRE
+      deprecated: false
+    delete:
+      tags:
+      - Withdrawal
+      summary: Cancel a Fiat withdrawal
+      description: Success response. Cancels the fiat withdrawal
+      operationId: deleteExchangeFiatWithdrawalById
+      parameters:
+      - name: id
+        in: path
+        description: withdrawal ID
+        required: true
+        style: simple
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              example:
+                status: success
+                withdrawal: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Fiatwithdrawaldetail
+  /exchange/coin-withdrawal-fees:
+    get:
+      tags:
+      - Withdrawal
+      summary: Coin withdrawal fees
+      description: Success response. Returns the withdrawal fees of all supported digital currency
+      operationId: Coinwithdrawalfees
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coinwithdrawalfeesresponse'
+              example:
+                withdraw:
+                  BTC: '0.001'
+                  ETH: '0.0027'
+                  XRP: '0.02'
+                withdraw_by_networks:
+                  BTC:
+                    network:
+                      code: bitcoin
+                      name: Bitcoin
+                    fee: '0.0005'
+                  ETH:
+                    network:
+                      code: erc20
+                      name: Ethereum
+                    fee: '0.00128205'
+                  XRP:
+                    network:
+                      code: ripple
+                      name: Ripple
+                    fee: '0.215'
+      deprecated: false
+components:
+  schemas:
+    Withdraw:
+      title: Withdraw
+      required:
+      - BTC
+      - ETH
+      - XRP
+      type: object
+      properties:
+        BTC:
+          type: string
+        ETH:
+          type: string
+        XRP:
+          type: string
+      example:
+        BTC: '0.001'
+        ETH: '0.0027'
+        XRP: '0.02'
+    parsed_withdrawal_address:
+      title: parsed_withdrawal_address
+      type: object
+      properties:
+        address:
+          type: string
+        address_id:
+          type:
+          - string
+          - 'null'
+          description: available only for cryprotcurrencies which support additional address identifiers (XRP, XLM)
+      description: in case additional information is included in the address (e.g. XRP tag or XLM memo), this item provides parsed withdrawal_address
+    Coinwithdrawalfeesresponse:
+      title: Coinwithdrawalfeesresponse
+      required:
+      - withdraw
+      - withdraw_by_networks
+      type: object
+      properties:
+        withdraw:
+          $ref: '#/components/schemas/Withdraw'
+        withdraw_by_networks:
+          $ref: '#/components/schemas/WithdrawByNetworks'
+      example:
+        withdraw:
+          BTC: '0.001'
+          ETH: '0.0027'
+          XRP: '0.02'
+    status9:
+      title: status9
+      enum:
+      - UNCONFIRMED
+      - PENDING
+      - DONE
+      - CANCELED
+      type: string
+    WithdrawByNetworks:
+      title: Withdraw Fees by network
+      required:
+      - BTC
+      - ETH
+      - XRP
+      type: object
+      properties:
+        BTC:
+          type: object
+        ETH:
+          type: object
+        XRP:
+          type: object
+      example:
+        BTC:
+          network:
+            code: bitcoin
+            name: Bitcoin
+          fee: '0.0005'
+        ETH:
+          network:
+            code: erc20
+            name: Ethereum
+          fee: '0.0015'
+        XRP:
+          network:
+            code: ripple
+            name: Ripple
+          fee: '0.2'
+    Fiatwithdrawaldetailresponse:
+      title: Fiatwithdrawaldetailresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status9'
+        type:
+          $ref: '#/components/schemas/type2'
+    status4:
+      title: status4
+      enum:
+      - PROCESSING
+      - PENDING
+      - DONE
+      - CANCELED
+      type: string
+    Coinwithdrawallistresponse:
+      title: Coinwithdrawallistresponse
+      type: object
+      properties:
+        tx_hash:
+          type:
+          - string
+          - 'null'
+          description: could be null when external withdrawal is created
+          example: null
+        status:
+          $ref: '#/components/schemas/status4'
+        withdrawal_address:
+          type:
+          - string
+          - 'null'
+          description: could be null only in some negligible cases (system doesn't have the address, very old withdrawals)
+        parsed_withdrawal_address:
+          $ref: '#/components/schemas/parsed_withdrawal_address'
+    Newcoinwithdrawalrequest:
+      title: Newcoinwithdrawalrequest
+      required:
+      - currency
+      - amount
+      - withdrawal_address
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Cryptocurrency symbol - [supported values](#tag/Supported-Currencies)
+        amount:
+          type: number
+          description: format it as string (for compatibility of currencies with long decimal part, e.g. ETH)
+        withdrawal_address:
+          type: string
+        withdrawal_address_id:
+          type: string
+          description: additional address identifier (e.g. XRP tag or XLM memo)
+        network:
+          type: string
+          description: Cryptocurrency network code. If not passed, default network will be selected. - [supported values](#tag/Supported-Networks)
+    type2:
+      title: type2
+      enum:
+      - WITHDRAWAL_BY_WIRE
+      type: string
+    Coinwithdrawaldetailresponse:
+      title: Coinwithdrawaldetailresponse
+      type: object
+      properties:
+        tx_hash:
+          type:
+          - string
+          - 'null'
+          description: could be null when external withdrawal is created
+          example: null
+        status:
+          $ref: '#/components/schemas/status4'
+        withdrawal_address:
+          type:
+          - string
+          - 'null'
+          description: could be null only in some negligible cases (system doesn't have the address, very old withdrawals)
+        parsed_withdrawal_address:
+          $ref: '#/components/schemas/parsed_withdrawal_address'
+    Newcoinwithdrawalresponse:
+      title: Newcoinwithdrawalresponse
+      type: object
+      properties:
+        tx_hash:
+          type:
+          - string
+          - 'null'
+          description: could be null when external withdrawal is created
+          example: null
+        status:
+          $ref: '#/components/schemas/status4'
+        withdrawal_address:
+          type: string
+        parsed_withdrawal_address:
+          $ref: '#/components/schemas/parsed_withdrawal_address'
+    Fiatwithdrawallistresponse:
+      title: Fiatwithdrawallistresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status9'
+        type:
+          $ref: '#/components/schemas/type2'

@@ -80,76 +80,6 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: bitoasis:bitoasis-account-api
-  name: BitOasis Account API
-  description: Authenticated account balances and registered banks.
-  humanURL: https://api.bitoasis.net/doc/
-  baseURL: https://api.bitoasis.net/v1
-  tags:
-  - Account
-  properties:
-  - type: OpenAPI
-    url: openapi/bitoasis-account-api-openapi.yml
-  - type: Documentation
-    url: https://api.bitoasis.net/doc/
-  - type: APIReference
-    url: https://api.bitoasis.net/doc/
-- aid: bitoasis:bitoasis-coin-deposits-api
-  name: BitOasis Coin Deposits API
-  description: Digital-asset deposit history and address generation.
-  humanURL: https://api.bitoasis.net/doc/
-  baseURL: https://api.bitoasis.net/v1
-  tags:
-  - Coin Deposits
-  properties:
-  - type: OpenAPI
-    url: openapi/bitoasis-coin-deposits-api-openapi.yml
-  - type: Documentation
-    url: https://api.bitoasis.net/doc/
-  - type: APIReference
-    url: https://api.bitoasis.net/doc/
-- aid: bitoasis:bitoasis-coin-withdrawals-api
-  name: BitOasis Coin Withdrawals API
-  description: Digital-asset withdrawal history, fees, and creation.
-  humanURL: https://api.bitoasis.net/doc/
-  baseURL: https://api.bitoasis.net/v1
-  tags:
-  - Coin Withdrawals
-  properties:
-  - type: OpenAPI
-    url: openapi/bitoasis-coin-withdrawals-api-openapi.yml
-  - type: Documentation
-    url: https://api.bitoasis.net/doc/
-  - type: APIReference
-    url: https://api.bitoasis.net/doc/
-- aid: bitoasis:bitoasis-fiat-deposits-api
-  name: BitOasis Fiat Deposits API
-  description: Fiat deposit history.
-  humanURL: https://api.bitoasis.net/doc/
-  baseURL: https://api.bitoasis.net/v1
-  tags:
-  - Fiat Deposits
-  properties:
-  - type: OpenAPI
-    url: openapi/bitoasis-fiat-deposits-api-openapi.yml
-  - type: Documentation
-    url: https://api.bitoasis.net/doc/
-  - type: APIReference
-    url: https://api.bitoasis.net/doc/
-- aid: bitoasis:bitoasis-fiat-withdrawals-api
-  name: BitOasis Fiat Withdrawals API
-  description: Fiat withdrawal history, creation, and cancellation.
-  humanURL: https://api.bitoasis.net/doc/
-  baseURL: https://api.bitoasis.net/v1
-  tags:
-  - Fiat Withdrawals
-  properties:
-  - type: OpenAPI
-    url: openapi/bitoasis-fiat-withdrawals-api-openapi.yml
-  - type: Documentation
-    url: https://api.bitoasis.net/doc/
-  - type: APIReference
-    url: https://api.bitoasis.net/doc/
 - aid: bitoasis:bitoasis-market-data-api
   name: BitOasis Market Data API
   description: Public market data endpoints (no authentication required).
@@ -164,18 +94,86 @@ apis:
     url: https://api.bitoasis.net/doc/
   - type: APIReference
     url: https://api.bitoasis.net/doc/
-- aid: bitoasis:bitoasis-orders-api
-  name: BitOasis Orders API
-  description: Place, cancel, and read Pro exchange orders.
+- aid: bitoasis:bitoasis-accounts-api
+  name: BitOasis Accounts API
+  description: The Accounts API from BitOasis — 1 operation(s) for accounts.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-banks-api
+  name: BitOasis Banks API
+  description: The Banks API from BitOasis — 1 operation(s) for banks.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Banks
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-banks-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-deposit-api
+  name: BitOasis Deposit API
+  description: The Deposit API from BitOasis — 5 operation(s) for deposit.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Deposit
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-deposit-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-error-responses-api
+  name: BitOasis Error responses API
+  description: All API calls can generate those error responses bellow.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Error responses
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-error-responses-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-order-api
+  name: BitOasis Order API
+  description: The Order API from BitOasis — 4 operation(s) for order.
   humanURL: https://api.bitoasis.net/doc/
   baseURL: https://api.bitoasis.net/v1
   tags:
   - Order
-  tags_raw:
-  - Orders
   properties:
   - type: OpenAPI
-    url: openapi/bitoasis-orders-api-openapi.yml
+    url: openapi/bitoasis-order-api-openapi.yml
+  - type: Documentation
+    url: https://api.bitoasis.net/doc/
+  - type: APIReference
+    url: https://api.bitoasis.net/doc/
+- aid: bitoasis:bitoasis-withdrawal-api
+  name: BitOasis Withdrawal API
+  description: The Withdrawal API from BitOasis — 7 operation(s) for withdrawal.
+  humanURL: https://api.bitoasis.net/doc/
+  baseURL: https://api.bitoasis.net/v1
+  tags:
+  - Withdrawal
+  properties:
+  - type: OpenAPI
+    url: openapi/bitoasis-withdrawal-api-openapi.yml
   - type: Documentation
     url: https://api.bitoasis.net/doc/
   - type: APIReference

@@ -1,0 +1,387 @@
+openapi: 3.2.0
+info:
+  title: BitOasis Public Order API
+  description: 'BitOasis Technologies is the Middle East & North Africa’s (MENA) largest online digital currency platform. Established in 2015, BitOasis operates from the United Arab Emirates (UAE) and currently aims its services at retail clients from the Gulf Cooperation Council (GCC) region, with plans to expand to the rest of the MENA market in the future. The services currently offered by BitOasis are as follows:
+
+
+    + A Bitcoin (BTC) wallet with multi-signature technology for long term storage of Bitcoin (BTC).
+
+
+    + A platform for basic buying/selling of digital currencies (referred to as the “BitOasis Core”).
+
+
+    + A platform for trading in digital currencies (referred to as the “BitOasis Pro”).
+
+    + A platform that facilitates sending and receiving digital currencies.
+
+
+    + A platform that facilitates online and offline storage of clients’ digital assets.
+
+
+    The only services available for the public API are:
+
+
+    + Trading in digital currencies (referred to as the “BitOasis Pro”).
+
+
+    + Sending and receiving digital currencies.
+
+
+    And we are planning to provide a public API for the rest of the services in the near future.'
+  contact:
+    url: https://bitoasis.net/support
+  x-logo:
+    url: logo.svg
+    altText: BitOasis
+  version: '1.0'
+servers:
+- url: https://api.bitoasis.net/v1/
+  variables:
+    defaultHost:
+      default: https://api.bitoasis.net
+tags:
+- name: Order
+  description: ''
+paths:
+  /exchange/orders/{pair}:
+    get:
+      tags:
+      - Order
+      summary: Order list
+      description: Success response. Returns the history of Pro exchange orders for a specific pair.
+      operationId: Orderlist
+      parameters:
+      - name: pair
+        in: path
+        description: currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: offset
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: maximal value is 1000
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: from_date
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      - name: status
+        in: query
+        description: one of OPEN, DONE, CANCELED
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orderlistresponse'
+              example:
+                orders:
+                - id: 2
+                  pair: BTC-AED
+                  side: sell
+                  type: market
+                  base_amount: '1.0'
+                  price: null
+                  avg_execution_price: '1030.14'
+                  fee: '0.0'
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: DONE
+                - id: 1
+                  pair: BTC-AED
+                  side: buy
+                  type: limit
+                  base_amount: '1.0'
+                  price: '1.23014'
+                  avg_execution_price: null
+                  fee: '0.004'
+                  date_created: '2015-02-10T15:11:22+00:00'
+                  status: OPEN
+      deprecated: false
+  /exchange/order/{id}:
+    get:
+      tags:
+      - Order
+      summary: Order detail
+      description: Success Response. Returns the details of specific Pro exchange order.
+      operationId: Orderdetail
+      parameters:
+      - name: id
+        in: path
+        description: order ID
+        required: true
+        style: simple
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orderdetailresponse'
+              example:
+                order:
+                  id: 2
+                  pair: BTC-AED
+                  side: sell
+                  type: market
+                  base_amount: '1.0'
+                  price: null
+                  avg_execution_price: '1030.14'
+                  fee: '0.0'
+                  date_created: '2015-02-12T15:22:22+00:00'
+                  status: DONE
+      deprecated: false
+  /exchange/order:
+    post:
+      tags:
+      - Order
+      summary: New or test order
+      description: Success response. Creates a new pro exchange order
+      operationId: Neworder
+      parameters:
+      - name: test
+        in: path
+        description: confirm this is a test
+        required: false
+        style: simple
+        schema:
+          type: boolean
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Neworderrequest'
+            example:
+              side: buy
+              type: limit
+              pair: BTC-AED
+              amount: '10.0'
+              price: '900.0'
+        required: true
+      responses:
+        '201':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Neworderresponse'
+              example:
+                order:
+                  id: 3
+                  pair: BTC-AED
+                  side: buy
+                  type: limit
+                  base_amount: '10.0'
+                  price: '900.0'
+                  avg_execution_price: null
+                  fee: null
+                  date_created: '2017-02-10T15:11:22+00:00'
+                  status: OPEN
+      deprecated: false
+  /exchange/cancel-order:
+    post:
+      tags:
+      - Order
+      summary: Cancel order
+      description: Success response. Cancels a Pro exchange order.
+      operationId: Cancelorder
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cancelorderrequest'
+            example:
+              id: 3
+        required: true
+      responses:
+        '201':
+          description: Order cancelling might not be instant. Order could be still in OPEN status for a while before switch to CANCEL state (it can take few seconds to get cancel status).
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cancelorderresponse'
+              example:
+                is_canceled: true
+                order:
+                  id: 3
+                  pair: BTC-USD
+                  side: buy
+                  type: limit
+                  base_amount: '10.0'
+                  price: '900.0'
+                  avg_execution_price: null
+                  fee: null
+                  date_created: '2017-02-10T15:11:22+00:00'
+                  status: OPEN
+                  is_canceled: true
+      deprecated: false
+components:
+  schemas:
+    Cancelorderresponse:
+      title: Cancelorderresponse
+      type: object
+      properties:
+        is_canceled:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/status11'
+        price:
+          type:
+          - number
+          - 'null'
+          description: null for market order, limit price for limit order
+        avg_execution_price:
+          type:
+          - number
+          - 'null'
+          description: null when in OPEN status, number in string format otherwise
+        fee:
+          type: number
+          description: decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)
+    status11:
+      title: status11
+      enum:
+      - OPEN
+      - DONE
+      - CANCELED
+      - UNCONFIRMED
+      type: string
+      description: Order can get to UNCONFIRMED status only in rare cases. It will get resolved to OPEN or CANCELED after a short period of time.
+    Cancelorderrequest:
+      title: Cancelorderrequest
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: number
+    side:
+      title: side
+      enum:
+      - buy
+      - sell
+      type: string
+    type4:
+      title: type4
+      enum:
+      - limit
+      - market
+      - stop
+      - stop_limit
+      type: string
+    Orderdetailresponse:
+      title: Orderdetailresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status11'
+        price:
+          type:
+          - string
+          - 'null'
+          description: null for market order, limit price for limit order
+        avg_execution_price:
+          type:
+          - number
+          - 'null'
+          description: null when in OPEN status, number in string format otherwise
+        fee:
+          type: number
+          description: decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)
+    Neworderresponse:
+      title: Neworderresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status11'
+        price:
+          type:
+          - number
+          - 'null'
+          description: null for market order, limit price for limit order
+        avg_execution_price:
+          type:
+          - number
+          - 'null'
+          description: null when in OPEN status, number in string format otherwise
+        fee:
+          type: number
+          description: decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)
+        stop_price:
+          type: number
+          description: available only for stop and stop limit type
+        date_stop_price_triggered:
+          type:
+          - string
+          - 'null'
+          description: available only for stop and stop limit type, null if stop price hasn't been triggered yet
+    Neworderrequest:
+      title: Neworderrequest
+      required:
+      - side
+      - type
+      - pair
+      - amount
+      type: object
+      properties:
+        side:
+          $ref: '#/components/schemas/side'
+        type:
+          $ref: '#/components/schemas/type4'
+        pair:
+          type: string
+          description: currency pair (crypto-fiat, crypto-crypto) - [supported values](#tag/Supported-Pairs)
+        amount:
+          type: number
+          description: format it as string (for compatibility of currencies with long decimal part, e.g. ETH)
+        price:
+          type: number
+          description: limit price, required within limit type
+        stop_price:
+          type: number
+          description: stop price, required within stop and stop limit type
+    Orderlistresponse:
+      title: Orderlistresponse
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status11'
+        price:
+          type:
+          - number
+          - 'null'
+          description: null for market order, limit price for limit order
+        avg_execution_price:
+          type:
+          - number
+          - 'null'
+          description: null when in OPEN status (or CANCELED before execution), number in string format otherwise
+        fee:
+          type: number
+          description: decimal value of percentage fee formatted as string (e.g. 0.4% fee => 0.004 decimal fee)

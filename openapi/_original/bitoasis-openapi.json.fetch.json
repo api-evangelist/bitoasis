@@ -1,0 +1,12 @@
+{
+ "url": "https://api.bitoasis.net/doc/swagger.json",
+ "final": "https://api.bitoasis.net/doc/swagger.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 79175,
+ "sha256": "5a4566e2d3ce55bb72698f6dc211b7f75df169fc10f672045a8101a3772b3f56",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}
