@@ -65,3 +65,9 @@ paths:
                     AED: '15.5'
                     BTC: '0.2756'
       deprecated: false
+x-provenance:
+  method: harvested
+  publisher: BitOasis
+  source: https://api.bitoasis.net/doc/swagger.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
